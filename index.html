@@ -147,7 +147,7 @@ const logo=st=>SRC?`<img src="${SRC}" alt="" style="display:block;margin:0 auto;
 const $=id=>document.getElementById(id);
 const RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
 let uid=0,shoe=[],dealer=[],hands=[],hi=0,phase='idle',reveal=false,side=true,target=0;
-let balance=1000;
+let balance=5000000;
 try{const s=localStorage.getItem('bj_bal');if(s!==null&&!isNaN(+s))balance=+s}catch(e){}
 const save=()=>{try{localStorage.setItem('bj_bal',balance)}catch(e){}};
 const fmt=n=>'$'+n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -268,7 +268,7 @@ function settle(){
 document.querySelectorAll('.sm').forEach(b=>b.onclick=()=>{const i=+b.dataset.f,v=num(i);setf(i,b.dataset.m==='h'?v/2:v*2)});
 [0,1,2].forEach(i=>{$('i'+i).addEventListener('focus',()=>{target=i;render()});$('f'+i).addEventListener('click',()=>{target=i;[0,1,2].forEach(j=>$('f'+j).classList.toggle('sel',j===i))})});
 $('sw').onclick=()=>{side=!side;if(!side){setf(1,0);setf(2,0)}render()};
-$('wallet').onclick=()=>{if(confirm('¿Reiniciar saldo ficticio a $1000?')){balance=1000;save();render()}};
+$('wallet').onclick=()=>{if(confirm('¿Reiniciar saldo ficticio a $5000000?')){balance=5000000;save();render()}};
 function fit(){const t=document.querySelector('.table');const H=t.clientHeight,W=t.clientWidth;
   const fixed=2*(34+10)+60+H*.06;let cw=Math.min((H-fixed)/3,W*.17,72);cw=Math.max(cw,28);t.style.setProperty('--cw',cw+'px')}
 new ResizeObserver(fit).observe(document.querySelector('.table'));addEventListener('resize',fit);
