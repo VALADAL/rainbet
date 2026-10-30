@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0f1228">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ratbet">
+<meta name="format-detection" content="telephone=no">
 <title>Ratbet</title>
 <style>
 :root{
@@ -14,13 +19,13 @@
   --font:Montserrat,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--t1);font-family:var(--font);overscroll-behavior:none}
+html,body{margin:0;height:100%;-webkit-text-size-adjust:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-family:var(--font);overscroll-behavior:none}
 body{display:flex;justify-content:center}
-#app{width:100%;max-width:480px;min-height:100%;display:flex;flex-direction:column;background:var(--bg);padding-top:env(safe-area-inset-top)}
+#app{width:100%;max-width:480px;min-height:100%;display:flex;flex-direction:column;background:var(--bg)}
 button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 /* top bar */
 #app{height:100vh;height:100dvh;max-width:720px;overflow-y:auto;overflow-x:hidden}
-.top{flex:none;height:clamp(52px,7dvh,70px);display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid var(--fourth);background:var(--eighth)}
+.top{flex:none;box-sizing:content-box;height:clamp(52px,7dvh,70px);display:flex;align-items:center;gap:8px;padding:env(safe-area-inset-top) 10px 0;border-bottom:1px solid var(--fourth);background:var(--eighth)}
 .logo{display:flex;align-items:center;font-family:Yellowtail,Damion,Satisfy,"Segoe Script","Brush Script MT",cursive;font-size:clamp(26px,4.2dvh,36px);font-style:normal;font-weight:400;letter-spacing:.5px;margin-right:2px}
 .bal{background:var(--hi);border-radius:6px;height:clamp(34px,5.4dvh,48px);padding:0 10px;display:flex;align-items:center;gap:12px;font-weight:600;font-size:13px}
 .bal i{width:7px;height:7px;border-right:2px solid var(--t4);border-bottom:2px solid var(--t4);transform:rotate(45deg) translate(-2px,-2px)}
@@ -29,30 +34,57 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 .ico{width:clamp(70px,9dvh,84px);height:clamp(36px,5.6dvh,50px);background:var(--hi);border:1px solid var(--line);border-radius:6px;display:flex;align-items:center;justify-content:space-around}
 .badge{position:relative}.badge b{position:absolute;top:-8px;right:-9px;background:#3ae26a;color:#042;font-size:9px;border-radius:9px;padding:1px 5px}
 /* game card */
-.game{flex:1;min-height:0;display:flex;flex-direction:column;margin:1.2dvh 8px 0;background:var(--seventh);border-radius:10px;overflow:hidden}
-.gh{flex:none;display:flex;justify-content:space-between;align-items:center;padding:1.1dvh 14px;font-size:13px;font-weight:700;background:var(--fifth)}
-.gh span{display:flex;align-items:center;gap:8px}
-.fair{font-weight:600}
-.table{--cw:clamp(38px,min(15vw,7.4dvh),72px);position:relative;flex:1 1 0;min-height:150px;background:var(--eighth);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:2.6dvh 0}
-.oval{position:absolute;left:7%;right:7%;top:23%;bottom:23%;border:2px solid var(--fourth);border-radius:999px}
-.dealer,.player{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
-.hands{display:flex;gap:calc(var(--cw)*.35);justify-content:center}
-.hand{display:flex;flex-direction:column;align-items:center;padding:3px;border-radius:10px}
-.hand.act{outline:2px solid var(--blue);outline-offset:2px}
-.cards{display:flex;gap:calc(var(--cw)*.15);min-height:calc(var(--cw)*1.5)}
-.card{width:var(--cw);height:calc(var(--cw)*1.5);background:#fff;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--cw)*.12);font-family:Georgia,"Times New Roman",serif;font-size:calc(var(--cw)*.36);color:#222;box-shadow:0 2px 6px #0006}
-.card.r{color:#c4161c}.card small{font-size:calc(var(--cw)*.32);line-height:1}
-.card.back{background:var(--blue);border:2px solid #fff;color:#fff;font-family:"Brush Script MT",cursive;font-style:italic;font-size:calc(var(--cw)*.27);background-image:radial-gradient(circle at 50% 50%,hsl(207 90% 56%),var(--blue))}
+.game{flex:1;min-height:0;display:flex;flex-direction:column;margin:1.2dvh 14px 0;background:#151a36;border-radius:1.8cqw;overflow:hidden;container-type:inline-size}
+.gh{flex:none;display:flex;justify-content:space-between;align-items:center;box-sizing:border-box;height:10.2cqw;padding:0 3.2cqw;font-size:3cqw;font-weight:700;background:#1b2040;line-height:1}
+.gh span{display:flex;align-items:center}
+.gh .l svg:nth-child(1){margin-right:2.3cqw}.gh .l svg:nth-child(2){margin-right:1.5cqw}
+.gh .fair{font-weight:500}.gh .fair svg{margin-right:1.5cqw}
+.table{--u:min(calc(100cqw / 1238),calc(100cqh / 1152));--cw:calc(178 * var(--u));position:relative;flex:1 1 0;min-height:150px;background:#151a36;overflow:hidden;container-type:size}
+.stage{position:absolute;left:50%;top:50%;width:calc(1238 * var(--u));height:calc(1152 * var(--u));transform:translate(-50%,-50%)}
+.oval{position:absolute;left:calc(100 * var(--u));top:calc(265 * var(--u));width:calc(1037 * var(--u));height:calc(622 * var(--u));border:max(1.5px,calc(5.5 * var(--u))) solid #2c3258;border-radius:999px;box-sizing:border-box}
+.oval.bj{border-color:#2e5a3c}
+.rb{position:absolute;display:block;pointer-events:none}
+.rb1{left:calc(293.5 * var(--u));top:calc(505 * var(--u));width:calc(651 * var(--u));height:calc(67 * var(--u))}
+.rb2{left:calc(346 * var(--u));top:calc(577 * var(--u));width:calc(546 * var(--u));height:calc(66 * var(--u))}
+.dealer,.player{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;z-index:2}
+.dealer{top:calc(89 * var(--u))}
+.player{top:calc(664 * var(--u))}
+#dt{margin-top:calc(41 * var(--u))}
+.hands{display:flex;gap:calc(var(--cw) * .79);justify-content:center;align-items:flex-start}
+.hand{position:relative;display:flex;flex-direction:column;align-items:center}
+.hand .tot{margin-bottom:calc(35 * var(--u))}
+.cards{display:flex;gap:calc(var(--cw) * .157);min-height:calc(var(--cw) * 1.5)}
+.cards.tight{gap:calc(var(--cw) * -.35)}
+.card{position:relative;box-sizing:content-box;flex:none;width:var(--cw);height:calc(var(--cw) * 1.5);background:#fff;border-radius:calc(14 * var(--u));color:#272a45;border:0 solid transparent;font-family:Georgia,"Times New Roman",serif;box-shadow:0 calc(4 * var(--u)) calc(22 * var(--u)) #0008}
+.card.r{color:#b52a2a}
+.card span,.card small{position:absolute;left:0;right:0;text-align:center;line-height:1;transform:translateY(-50%)}
+.card span{top:37%;font-size:calc(var(--cw) * .375)}
+.card small{top:73%;font-size:calc(var(--cw) * .3)}
+.card.back{box-sizing:border-box;display:grid;place-items:center;background:#3a72ab url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 178 267' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%2385b6e2' stroke-width='2.4'%3E%3Cpath d='M16 56V24h32M162 56V24h-32M16 211v32h32M162 211v32h-32'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Crect x='0' y='0' width='9' height='9' rx='2'/%3E%3Crect x='169' y='0' width='9' height='9' rx='2'/%3E%3Crect x='0' y='258' width='9' height='9' rx='2'/%3E%3Crect x='169' y='258' width='9' height='9' rx='2'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat;border:calc(4 * var(--u)) solid #fff}
 .card.in{animation:deal .28s ease-out}
-@keyframes deal{from{transform:translate(120px,-30px) scale(.8);opacity:0}to{transform:none;opacity:1}}
-.tot{min-width:30px;height:clamp(24px,3.7dvh,34px);padding:0 8px;border-radius:6px;background:hsl(231 40% 40%);border:2px solid hsl(231 30% 55%);display:grid;place-items:center;font-weight:700;font-size:14px;margin:.7dvh 0}
-.tot.bust{background:hsl(358 70% 40%);border-color:hsl(358 80% 60%)}
-.tot.w{background:hsl(133 53% 34%);border-color:hsl(133 69% 58%)}
-.banners{position:relative;z-index:1;text-align:center;pointer-events:none;width:100%}
-.ban{margin:0 auto;font-size:clamp(7px,1.1dvh,9px);letter-spacing:.8px;font-weight:600;color:var(--t4);padding:1dvh 0;clip-path:polygon(4% 0,96% 0,100% 50%,96% 100%,4% 100%,0 50%)}
-.ban.a{width:min(260px,62%);background:hsl(228 36% 20%)}.ban.b{width:min(215px,52%);background:hsl(228 36% 17%);margin-top:2px;color:hsl(238 11% 45%)}
-.shoe{position:absolute;right:-48px;top:50%;margin-top:-30px;width:80px;height:70px;border-radius:6px;background:var(--blue);border:2px solid #fff;box-shadow:-4px 4px 0 -1px #cde,-8px 8px 0 -2px #9bd}
-.msg{position:absolute;top:6px;left:50%;transform:translateX(-50%);padding:6px 14px;border-radius:20px;font-weight:700;font-size:13px;background:#000a;white-space:nowrap;display:none;z-index:3}
+@keyframes deal{from{transform:translate(calc(420 * var(--u)),calc(-40 * var(--u))) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.tot{--c:#4a4d88;--nt:#fff;--d:#4a4d88;--lt:#fff;position:relative;display:flex;align-items:stretch;box-sizing:border-box;min-width:calc(100 * var(--u));height:calc(87 * var(--u));border-radius:calc(16 * var(--u));border:max(1.5px,calc(5 * var(--u))) solid #5f629c;background:#4a4d88;color:#fff;font-weight:700;font-size:calc(42 * var(--u));overflow:hidden;line-height:1}
+.tot .n{display:grid;place-items:center;flex:1 0 auto;padding:0 calc(22 * var(--u));border-radius:calc(11 * var(--u));background:#4a4d88;color:#fff}
+.tot .lw{display:flex;align-items:center;max-width:0;overflow:hidden;white-space:nowrap}
+.tot .lw span{padding:0 calc(26 * var(--u)) 0 calc(22 * var(--u));font-weight:500;font-size:calc(40 * var(--u));color:var(--lt)}
+.tot.w{--c:#62b877;--nt:#2b5836;--d:#2e5037;--lt:#62b877}
+.tot.y{--c:#eec743;--nt:#9a7d1e;--d:#a38a2b;--lt:#eec743}
+.tot.l{--c:#5b5f57;--nt:#151515;--d:#0e0e0e;--lt:#8b8b86}
+.tot.res{background:var(--d);border-color:var(--c)}
+.tot.res .n{background:var(--c);color:var(--nt)}
+.tot.res .lw{max-width:calc(260 * var(--u))}
+.tot.res.anim{animation:tb .4s ease both}
+.tot.res.anim .n{animation:tn .4s ease both}
+.tot.res.anim .lw{animation:tl .55s .3s cubic-bezier(.22,.9,.3,1) both}
+@keyframes tb{from{background:#4a4d88;border-color:#5f629c}}
+@keyframes tn{from{background:#4a4d88;color:#fff}}
+@keyframes tl{from{max-width:0}to{max-width:calc(260 * var(--u))}}
+.hand.rw .card{border:calc(5 * var(--u)) solid #5aa873}.hand.rt .card,.cards.rt .card{border:calc(5 * var(--u)) solid #c9a63a}.hand.rl .card{border:calc(5 * var(--u)) solid #3c3f46}
+.hand.act::before{content:"";position:absolute;left:-20%;right:-20%;bottom:calc(var(--cw) * -.75);height:calc(var(--cw) * 1.1);background:radial-gradient(ellipse at 50% 50%,#6ee7b733,transparent 68%);pointer-events:none;z-index:-1}
+.hand.act::after{content:"";position:absolute;left:50%;bottom:calc(var(--cw) * -.3);width:38%;height:4px;margin-left:-19%;border-radius:4px;background:#6ee7b7}
+.shoe{position:absolute;right:0;top:calc(50% + 18 * var(--u) - 155 * var(--u));width:calc(113 * var(--u));height:calc(310 * var(--u));z-index:1;pointer-events:none}
+.shoe svg{width:100%;height:100%;display:block;overflow:visible}
+.msg{position:absolute;top:6px;left:50%;transform:translateX(-50%);padding:6px 14px;border-radius:20px;font-weight:700;font-size:13px;background:#000a;white-space:nowrap;display:none;z-index:5}
 .msg.show{display:block}.msg.win{color:var(--green)}.msg.lose{color:#ff6b73}
 /* controls */
 .ctrl{flex:none;padding:1.1dvh 10px .8dvh;background:var(--fifth)}
@@ -73,7 +105,8 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 .fld input::placeholder{color:hsl(231 20% 35%)}
 .sm{height:calc(100% - 12px);min-width:46px;border-radius:5px;background:var(--hi);font-size:11px;font-weight:600;color:var(--t3)}
 .chips{display:flex;justify-content:center;gap:2.2vw;margin:1.1dvh 0 .2dvh}
-.chip{width:clamp(30px,4.6dvh,50px);height:clamp(30px,4.6dvh,50px);border-radius:50%;font-weight:700;font-size:11px;border:3px dashed #ffffff55;display:grid;place-items:center;box-shadow:inset 0 0 0 4px var(--c),0 2px 4px #0006;background:var(--c)}
+.chip{width:clamp(30px,4.6dvh,50px);height:clamp(30px,4.6dvh,50px);padding:0;border:0;background:none;border-radius:50%;display:block;flex:none}
+.chip svg{width:100%;height:100%;display:block;overflow:visible}
 .chip:active{transform:scale(.92)}
 .foot{flex:none;display:flex;align-items:center;gap:18px;padding:1.1dvh 16px;color:var(--t3);font-size:11px;font-weight:500;border-top:1px solid var(--fourth)}
 .foot .mid{flex:1;text-align:center;font-family:"Brush Script MT",cursive;font-style:italic;font-size:20px;color:#fff3}
@@ -82,7 +115,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 .sw.off{background:var(--fourth)}.sw.off::after{right:auto;left:3px}
 .spacer{display:none}
 /* nav */
-.nav{flex:none;position:static;margin-top:1.2dvh;width:100%;height:clamp(52px,7.4dvh,70px);background:var(--eighth);border-top:1px solid var(--fourth);display:flex;align-items:center;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);font-size:11px;font-weight:500}
+.nav{flex:none;position:static;margin-top:1.2dvh;width:100%;box-sizing:content-box;height:clamp(52px,7.4dvh,70px);background:var(--eighth);border-top:1px solid var(--fourth);display:flex;align-items:center;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);font-size:11px;font-weight:500}
 .nav div{display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:center;flex:1;color:#fff}
 .nav .on{color:var(--blue);border-bottom:2px solid var(--blue)}
 .nav .av{flex:0 0 42px;width:42px;height:42px;border-radius:50%;background:var(--hi);margin:0 10px;height:42px}
@@ -92,7 +125,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 <div id="app">
   <div class="top">
     <div class="logo" id="logoH"></div>
-    <div class="bal"><span id="bal">$0,00</span><i></i></div>
+    <div class="bal"><span id="bal">$0</span><i></i></div>
     <button class="wallet" id="wallet" title="Reiniciar saldo"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M4 6h15a1 1 0 0 1 1 1v1h-5a3 3 0 0 0 0 6h5v3a1 1 0 0 1-1 1H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm11 4h6v3h-6a1.5 1.5 0 0 1 0-3z"/></svg></button>
     <div class="sp"></div>
     <div class="ico"><span class="badge"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M3 9h18v4H3zM4 14h7v7H4zM13 14h7v7h-7zM11 9h2v12h-2zM12 8C9 8 8 4 10 4s2 3 2 4zm0 0c3 0 4-4 2-4s-2 3-2 4z"/></svg><b>3</b></span><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22zm7-6V11a7 7 0 0 0-5-6.7V3a2 2 0 0 0-4 0v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1z"/></svg></div>
@@ -100,18 +133,21 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 
   <div class="game">
     <div class="gh">
-      <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aab" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
-      <svg width="16" height="18" viewBox="0 0 16 20"><rect width="16" height="20" rx="3" fill="#1c8de0"/><rect x="4" y="5" width="8" height="10" rx="1" fill="#fff" opacity=".9"/></svg>Blackjack</span>
-      <span class="fair"><svg width="16" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l8 3v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V5zm-1 13l6-6-1.4-1.4L11 12.2 8.9 10 7.5 11.4z"/></svg>Juego justo</span>
+      <span class="l"><svg width="3.2%" viewBox="0 0 24 24" style="width:3.3cqw;height:3.3cqw" fill="none" stroke="#9ca1ba" stroke-width="2"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.5" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 26 28" style="width:3.2cqw;height:3.5cqw"><g transform="rotate(-13 8 15)"><rect x="3" y="5" width="12" height="18" rx="2.4" fill="none" stroke="#3b82e4" stroke-width="2"/></g><rect x="9" y="3" width="14" height="19" rx="2.6" fill="#3b82e4"/><rect x="12" y="7" width="8" height="11" rx="1.2" fill="#fff"/><path d="M16 10.2l2 2.800-2 2.800-2-2.800z" fill="#162044"/></svg>Blackjack</span>
+      <span class="fair"><svg viewBox="0 0 24 24" style="width:3.1cqw;height:3.4cqw" fill="#fff"><path d="M12 2l8 3v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V5zm-1 13l6-6-1.4-1.4L11 12.2 8.9 10 7.5 11.4z"/></svg>Fair Play</span>
     </div>
 
     <div class="table">
       <div class="msg" id="msg"></div>
-      <div class="oval"></div>
-      <div class="dealer"><div class="cards" id="dc"></div><div class="tot" id="dt" style="display:none"></div></div>
-      <div class="banners"><div class="ban a">EL BLACKJACK PAGA 3 A 2</div><div class="ban b">EL SEGURO PAGA 2 A 1</div></div>
-      <div class="player"><div class="hands" id="hands"></div></div>
-      <div class="shoe"></div>
+      <div class="stage">
+        <div class="oval"></div>
+        <svg class="rb rb1" viewBox="0 0 651 67"><path d="M5 5H646L612 33.500 646 62H5L39 33.500Z" fill="#1f2345" stroke="#1f2345" stroke-width="10" stroke-linejoin="round"/><text x="325.500" y="33.500" dy=".36em" text-anchor="middle" font-family="Montserrat,system-ui,-apple-system,sans-serif" font-weight="600" font-size="23" letter-spacing="2" fill="#363c6c">BLACKJACK PAYS 3 TO 2</text></svg>
+        <svg class="rb rb2" viewBox="0 0 546 66"><path d="M0 0H546L497 46Q490 66 470 66H76Q56 66 49 46Z" fill="#1e2244"/><text x="273" y="33" dy=".36em" text-anchor="middle" font-family="Montserrat,system-ui,-apple-system,sans-serif" font-weight="600" font-size="23" letter-spacing="2" fill="#353b6a">INSURANCE PAYS 2 TO 1</text></svg>
+        <div class="dealer"><div class="cards" id="dc"></div><div class="tot" id="dt" style="display:none"></div></div>
+        <div class="player"><div class="hands" id="hands"></div></div>
+      </div>
+      <div class="shoe"><svg viewBox="0 0 113 310" preserveAspectRatio="none"><rect x="90" y="0" width="60" height="310" rx="30" fill="#6f8bab" opacity=".9"/><g><rect x="8" y="26" width="92" height="5" rx="2.500" fill="#fff"/><rect x="6" y="33" width="94" height="5" rx="2.500" fill="#fff"/><rect x="4" y="40" width="96" height="5" rx="2.500" fill="#fff"/><rect x="0" y="48" width="100" height="218" rx="6" fill="#386fa9" stroke="#fff" stroke-width="5"/><path d="M12 76V68h40M12 232v8h40" fill="none" stroke="#85b6e2" stroke-width="2.400"/><rect x="2" y="50" width="9" height="9" rx="2" fill="#fff"/><rect x="2" y="255" width="9" height="9" rx="2" fill="#fff"/></g><rect x="90" y="0" width="60" height="310" rx="30" fill="#6f8bab" opacity=".9"/></svg></div>
     </div>
 
     <div class="ctrl">
@@ -146,11 +182,11 @@ const SRC=LOGO&&!LOGO.trim().startsWith('data:')?'data:image/png;base64,'+LOGO.t
 const logo=st=>SRC?`<img src="${SRC}" alt="" style="display:block;margin:0 auto;object-fit:contain;${st}">`:NOMBRE;
 const $=id=>document.getElementById(id);
 const RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],SU=['♠','♥','♦','♣'];
-let uid=0,shoe=[],dealer=[],hands=[],hi=0,phase='idle',reveal=false,side=true,target=0;
+let uid=0,shoe=[],dealer=[],hands=[],hi=0,phase='idle',reveal=false,side=true,target=0,dres='',dshown=false;
 let balance=1000;
 try{const s=localStorage.getItem('bj_bal');if(s!==null&&!isNaN(+s))balance=+s}catch(e){}
 const save=()=>{try{localStorage.setItem('bj_bal',balance)}catch(e){}};
-const fmt=n=>'$'+n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt=n=>'$'+n.toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:2});
 const num=i=>{const v=parseFloat(String($('i'+i).value).replace(',','.'));return isNaN(v)||v<0?0:Math.round(v*100)/100};
 const setf=(i,v)=>{$('i'+i).value=v?(+v.toFixed(2)).toString():''};
 function newShoe(){shoe=[];for(let d=0;d<6;d++)for(let r=0;r<13;r++)for(let s=0;s<4;s++)shoe.push({r,s,id:++uid});
@@ -163,17 +199,25 @@ function cardHTML(c,hide){
   if(hide)return `<div class="card back">${logo('width:80%;max-height:80%')}</div>`;
   const cls='card'+(c.s===1||c.s===2?' r':'')+(c.shown?'':' in');c.shown=true;
   return `<div class="${cls}"><span>${RK[c.r]}</span><small>${SU[c.s]}</small></div>`}
+function label(cs){let t=0,a=0;cs.forEach(c=>{t+=cv(c);if(c.r===0)a++});while(t>21&&a>0){t-=10;a--}return a>0&&t<21?(t-10)+' / '+t:String(t)}
 function say(t,k){const m=$('msg');m.textContent=t;m.className='msg show '+(k||'');}
 function hush(){$('msg').className='msg'}
 function render(){
   $('bal').textContent=fmt(balance);
   const hid=(phase==='play'||phase==='ins')&&!reveal;
   $('dc').innerHTML=dealer.map((c,i)=>cardHTML(c,hid&&i===1)).join('');
-  const dt=$('dt');dt.style.display=dealer.length?'grid':'none';
-  dt.textContent=hid?cv(dealer[0]):score(dealer);dt.className='tot'+(!hid&&score(dealer)>21?' bust':'');
-  $('hands').innerHTML=hands.map((h,i)=>{const s=score(h.cards);
-    const k=h.res==='w'?' w':s>21?' bust':'';
-    return `<div class="hand${hands.length>1&&i===hi&&phase==='play'?' act':''}"><div class="tot${k}">${s}</div><div class="cards">${h.cards.map(c=>cardHTML(c)).join('')}</div></div>`}).join('');
+  const dt=$('dt');dt.style.display=dealer.length?'flex':'none';
+  const dan=!!dres&&!dshown;if(dres)dshown=true;
+  dt.className='tot'+(dres?' res '+dres+(dan?' anim':''):'');
+  dt.innerHTML='<span class="n">'+(hid?cv(dealer[0]):label(dealer))+'</span>'+(dres?'<span class="lw"><span>Tie</span></span>':'');
+  $('dc').classList.toggle('rt',dres==='y');
+  $('hands').innerHTML=hands.map((h,i)=>{const s=score(h.cards),bust=s>21;
+    let tc='tot',lbl='',hc='';
+    if(h.out){const an=!h.shown;h.shown=true;
+      const m={bj:['w','Blackjack','rw'],w:['w','Win','rw'],push:['y',h.dbl?'Double':'Tie','rt'],l:['l',bust?'':(h.dbl?'Double':'Stand'),'rl']}[h.out];
+      tc+=' res '+m[0]+(an?' anim':'');lbl=m[1];hc=' '+m[2]}
+    return `<div class="hand${hc}${hands.length>1&&i===hi&&phase==='play'?' act':''}"><div class="${tc}"><span class="n">${label(h.cards)}</span>${lbl?`<span class="lw"><span>${lbl}</span></span>`:''}</div><div class="cards">${h.cards.map(c=>cardHTML(c)).join('')}</div></div>`}).join('');
+  document.querySelector('.oval').classList.toggle('bj',hands.length===1&&hands[0].out==='bj');
   $('bets').className='bets'+(phase==='idle'?'':' off');
   [0,1,2].forEach(i=>$('f'+i).classList.toggle('sel',i===target));
   $('f1').previousElementSibling.style.display=$('f1').style.display=$('f2').style.display=$('f2').previousElementSibling.style.display=side?'':'none';
@@ -202,7 +246,7 @@ function start(){
   if(b<=0){say('Ingresa una apuesta','lose');return}
   if(b+pp+t3>balance+1e-9){say('Saldo insuficiente','lose');return}
   balance-=b+pp+t3;save();hush();reveal=false;
-  hands=[{cards:[],bet:b}];dealer=[];hi=0;
+  hands=[{cards:[],bet:b}];dealer=[];hi=0;dres='';dshown=false;
   hands[0].cards.push(draw());dealer.push(draw());hands[0].cards.push(draw());dealer.push(draw());
   let note=[];
   if(pp>0){const [x,y]=hands[0].cards;let m=0;
@@ -228,7 +272,7 @@ function insure(y){
   if(y)say('Sin blackjack del crupier','lose');render()}
 function hit(){const h=hands[hi];h.cards.push(draw());if(score(h.cards)>=21)next();else render()}
 function stand(){next()}
-function dbl(){const h=hands[hi];balance-=h.bet;h.bet*=2;h.cards.push(draw());save();next()}
+function dbl(){const h=hands[hi];balance-=h.bet;h.bet*=2;h.dbl=true;h.cards.push(draw());save();next()}
 function split(){const h=hands[0];balance-=h.bet;save();
   const c2=h.cards.pop();hands=[{cards:[h.cards[0],draw()],bet:h.bet,sp:1},{cards:[c2,draw()],bet:h.bet,sp:1}];hi=0;
   if(score(hands[0].cards)===21)next();else render()}
@@ -244,26 +288,37 @@ function finish(){
   setTimeout(step,600)}
 function settle(){
   const d=score(dealer),dbj=isBJ(dealer);let net=0,paid=0;
-  hands.forEach(h=>{const s=score(h.cards),bj=isBJ(h.cards)&&!h.sp;let p=0;
+  hands.forEach(h=>{const s=score(h.cards),bj=isBJ(h.cards)&&!h.sp;let m=0,p=0;
     if(h.ins&&dbj)p+=h.ins*3;
-    if(s>21)p+=0;
-    else if(bj){p+=dbj?h.bet:h.bet*2.5}
-    else if(dbj)p+=0;
-    else if(d>21||s>d)p+=h.bet*2;
-    else if(s===d)p+=h.bet;
-    h.res=p>h.bet?'w':'';paid+=p;net+=p-h.bet-(h.ins||0)});
+    if(s>21)m=0;
+    else if(bj)m=dbj?h.bet:h.bet*2.5;
+    else if(dbj)m=0;
+    else if(d>21||s>d)m=h.bet*2;
+    else if(s===d)m=h.bet;
+    p+=m;h.out=m>h.bet?(bj?'bj':'w'):m===h.bet?'push':'l';h.shown=false;
+    paid+=p;net+=p-h.bet-(h.ins||0)});
+  dres=hands.some(h=>h.out==='push')?'y':'';dshown=false;
   balance+=paid;save();phase='idle';
-  const bj=hands.length===1&&isBJ(hands[0].cards)&&!hands[0].sp;
-  if(net>0)say((bj?'Blackjack! ':'Ganaste ')+fmt(net),'win');
-  else if(net<0)say((score(hands[0].cards)>21&&hands.length===1?'Te pasaste · ':'Perdiste ')+fmt(-net),'lose');
-  else say('Empate');
   const keep=hands;render();
   if(balance<=0)say('Sin saldo · toca la billetera','lose');
   const b=num(0);if(b>balance)setf(0,balance);
 }
 /* ui wiring */
-[['1','#9aa0b8'],['5','#c0283c'],['10','#1f6fc0'],['25','#1f8a55'],['100','#2c2f40'],['500','#6a35c2']].forEach(([v,c])=>{
-  const b=document.createElement('button');b.className='chip';b.style.setProperty('--c',c);b.textContent=v;
+const CHIPS=[
+  ['1',{body:'#f3f3f3',edge:'#bdbdbd',notch:'#1c1c1c',ring:'#2a2f4a',face:'#f7f7f7',txt:'#252b4a'}],
+  ['5',{body:'#d4524f',edge:'#a73634',notch:'#fff',ring:'#fff',face:'#d4524f',txt:'#fff'}],
+  ['10',{body:'#4a86d8',edge:'#335f9e',notch:'#fff',ring:'#fff',face:'#4a86d8',txt:'#fff'}],
+  ['25',{body:'#56a86d',edge:'#3d7a4f',notch:'#fff',ring:'#fff',face:'#56a86d',txt:'#fff'}],
+  ['100',{body:'#404040',edge:'#232323',notch:'#fff',ring:'#fff',face:'#404040',txt:'#fff'}],
+  ['500',{body:'#7b4fd3',edge:'#5733a0',notch:'#fff',ring:'#fff',face:'#7b4fd3',txt:'#fff'}]];
+function chipSVG(v,c){
+  let n='';
+  for(let i=0;i<8;i++){const d=i%2?'M-5.2 -46.5h10.4a2.6 2.6 0 0 1 2.6 2.6v3.4a2.6 2.6 0 0 1-2.6 2.6h-10.4a2.6 2.6 0 0 1-2.6-2.6v-3.4a2.6 2.6 0 0 1 2.6-2.6z':'M-5.6 -46.5h11.2a2.8 2.8 0 0 1 2.8 2.8v3.6a2.8 2.8 0 0 1-2.8 2.8h-11.2a2.8 2.8 0 0 1-2.8-2.8v-3.6a2.8 2.8 0 0 1 2.8-2.8z';
+    n+=`<path d="${d}" transform="rotate(${i*45})" fill="${c.notch}"/>`}
+  const fs=v.length>2?25:v.length>1?30:34;
+  return `<svg viewBox="-50 -50 100 106" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="5" r="49" fill="${c.edge}"/><circle cx="0" cy="0" r="49" fill="${c.body}"/><circle cx="0" cy="0" r="49" fill="none" stroke="#000" stroke-opacity=".06" stroke-width="1"/>${n}<circle cx="0" cy="0" r="30.5" fill="${c.face}"/><circle cx="0" cy="0" r="28.5" fill="none" stroke="${c.ring}" stroke-width="2.2" stroke-dasharray="5.2 3.4" stroke-opacity=".95"/><text x="0" y="0" text-anchor="middle" dominant-baseline="central" dy=".02em" font-family="Montserrat,system-ui,-apple-system,sans-serif" font-weight="700" font-size="${fs}" fill="${c.txt}">${v}</text></svg>`}
+CHIPS.forEach(([v,c])=>{
+  const b=document.createElement('button');b.className='chip';b.innerHTML=chipSVG(v,c);b.setAttribute('aria-label','Ficha '+v);
   b.onclick=()=>{if(phase!=='idle')return;setf(target,num(target)+ +v)};$('chips').appendChild(b)});
 document.querySelectorAll('.sm').forEach(b=>b.onclick=()=>{const i=+b.dataset.f,v=num(i);setf(i,b.dataset.m==='h'?v/2:v*2)});
 [0,1,2].forEach(i=>{$('i'+i).addEventListener('focus',()=>{target=i;render()});$('f'+i).addEventListener('click',()=>{target=i;[0,1,2].forEach(j=>$('f'+j).classList.toggle('sel',j===i))})});
