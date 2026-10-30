@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Ratbet">
 <meta name="format-detection" content="telephone=no">
 <title>Ratbet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:hsl(231 46% 11%);--surface:hsl(230 38% 17%);--seventh:hsl(231 39% 16%);--eighth:hsl(230 45% 13%);
@@ -60,7 +61,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 .card span,.card small{position:absolute;left:0;right:0;text-align:center;line-height:1;transform:translateY(-50%)}
 .card span{top:37%;font-size:calc(var(--cw) * .375)}
 .card small{top:73%;font-size:calc(var(--cw) * .3)}
-.card.back{box-sizing:border-box;display:grid;place-items:center;background:#3a72ab url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 178 267' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%2385b6e2' stroke-width='2.4'%3E%3Cpath d='M16 56V24h32M162 56V24h-32M16 211v32h32M162 211v32h-32'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Crect x='0' y='0' width='9' height='9' rx='2'/%3E%3Crect x='169' y='0' width='9' height='9' rx='2'/%3E%3Crect x='0' y='258' width='9' height='9' rx='2'/%3E%3Crect x='169' y='258' width='9' height='9' rx='2'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat;border:calc(4 * var(--u)) solid #fff}
+.card.back{box-sizing:border-box;display:grid;place-items:center;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 178 267' preserveAspectRatio='none'%3E%3Crect width='178' height='267' rx='6' fill='%23fff'/%3E%3Crect x='3.3' y='3.3' width='171.4' height='260.4' rx='2.6' fill='%233870a9'/%3E%3Cg transform='translate(0 0) scale(1 1)'%3E%3Crect x='0' y='0' width='11.5' height='11.8' rx='4' fill='%23fff'/%3E%3Crect x='3' y='3.1' width='5.2' height='5.4' rx='1.4' fill='%233870a9'/%3E%3Cpath d='M53 10.2H21V19.8H10.9V52' fill='none' stroke='%236b9cca' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate(178 0) scale(-1 1)'%3E%3Crect x='0' y='0' width='11.5' height='11.8' rx='4' fill='%23fff'/%3E%3Crect x='3' y='3.1' width='5.2' height='5.4' rx='1.4' fill='%233870a9'/%3E%3Cpath d='M53 10.2H21V19.8H10.9V52' fill='none' stroke='%236b9cca' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate(0 267) scale(1 -1)'%3E%3Crect x='0' y='0' width='11.5' height='11.8' rx='4' fill='%23fff'/%3E%3Crect x='3' y='3.1' width='5.2' height='5.4' rx='1.4' fill='%233870a9'/%3E%3Cpath d='M53 10.2H21V19.8H10.9V52' fill='none' stroke='%236b9cca' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate(178 267) scale(-1 -1)'%3E%3Crect x='0' y='0' width='11.5' height='11.8' rx='4' fill='%23fff'/%3E%3Crect x='3' y='3.1' width='5.2' height='5.4' rx='1.4' fill='%233870a9'/%3E%3Cpath d='M53 10.2H21V19.8H10.9V52' fill='none' stroke='%236b9cca' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat;border:0;border-radius:calc(6 * var(--cw) / 178)}.card.back img{width:calc(var(--cw) * .757)!important;max-height:none!important;height:auto!important}
 .card.in{animation:deal .28s ease-out}
 @keyframes deal{from{transform:translate(calc(420 * var(--u)),calc(-40 * var(--u))) scale(.8);opacity:0}to{transform:none;opacity:1}}
 .tot{--c:#4a4d88;--nt:#fff;--d:#4a4d88;--lt:#fff;position:relative;display:flex;align-items:stretch;box-sizing:border-box;min-width:calc(100 * var(--u));height:calc(87 * var(--u));border-radius:calc(16 * var(--u));border:max(1.5px,calc(5 * var(--u))) solid #5f629c;background:#4a4d88;color:#fff;font-weight:700;font-size:calc(42 * var(--u));overflow:hidden;line-height:1}
@@ -87,14 +88,14 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 .msg{position:absolute;top:6px;left:50%;transform:translateX(-50%);padding:6px 14px;border-radius:20px;font-weight:700;font-size:13px;background:#000a;white-space:nowrap;display:none;z-index:5}
 .msg.show{display:block}.msg.win{color:var(--green)}.msg.lose{color:#ff6b73}
 /* controls */
-.ctrl{flex:none;padding:1.1dvh 10px .8dvh;background:var(--fifth)}
-.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.ab{height:clamp(40px,5.8dvh,62px);border-radius:7px;background:var(--surface);border:1px solid var(--fourth);border-bottom:4px solid var(--fourth);font-weight:600;font-size:clamp(11px,1.5dvh,14px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 2px;text-align:center}
-.ab:active{transform:translateY(2px);border-bottom-width:2px}
-.ab:disabled{opacity:.4;pointer-events:none}
+.ctrl{flex:none;padding:1.1dvh 8px .8dvh;background:#181e38}
+.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.ab{height:clamp(44px,6.2dvh,54px);border-radius:5px;background:#181e38;border:1px solid #30344f;box-shadow:0 4px 0 #252c49;font-weight:500;font-size:12px;line-height:12px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0;padding:5.3px 0 0;text-align:center;white-space:nowrap}
+.ab:active{transform:translateY(2px);box-shadow:0 2px 0 #252c49}
+.ab:disabled{opacity:.3;pointer-events:none}
 .ab.wide{grid-column:1/-1;font-size:15px;background:var(--blue);border-color:hsl(207 90% 38%);flex-direction:row}
-.ab svg{width:16px;height:16px}
-.x2{color:var(--green);font-weight:800;font-size:14px}
+.ab .ic{display:flex;align-items:center;justify-content:center;height:18px;margin-bottom:8px}.ab .ic svg{display:block;width:auto;height:auto}
+.x2{color:#6ccd90;font-weight:800;font-size:13px;line-height:18px}
 .bets{transition:opacity .2s}.bets.off{opacity:.35;pointer-events:none}
 .lbl{font-size:10px;font-weight:600;color:hsl(231 30% 60%);margin:.8dvh 0 .4dvh 2px}
 .fld{height:clamp(32px,4.6dvh,50px);border-radius:7px;background:var(--seventh);border:1px solid transparent;display:flex;align-items:center;padding:0 6px 0 12px;gap:8px}
@@ -126,7 +127,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
   <div class="top">
     <div class="logo" id="logoH"></div>
     <div class="bal"><span id="bal">$0</span><i></i></div>
-    <button class="wallet" id="wallet" title="Reiniciar saldo"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M4 6h15a1 1 0 0 1 1 1v1h-5a3 3 0 0 0 0 6h5v3a1 1 0 0 1-1 1H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm11 4h6v3h-6a1.5 1.5 0 0 1 0-3z"/></svg></button>
+    <button class="wallet" id="wallet" title="Reset balance"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M4 6h15a1 1 0 0 1 1 1v1h-5a3 3 0 0 0 0 6h5v3a1 1 0 0 1-1 1H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm11 4h6v3h-6a1.5 1.5 0 0 1 0-3z"/></svg></button>
     <div class="sp"></div>
     <div class="ico"><span class="badge"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M3 9h18v4H3zM4 14h7v7H4zM13 14h7v7h-7zM11 9h2v12h-2zM12 8C9 8 8 4 10 4s2 3 2 4zm0 0c3 0 4-4 2-4s-2 3-2 4z"/></svg><b>3</b></span><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22zm7-6V11a7 7 0 0 0-5-6.7V3a2 2 0 0 0-4 0v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1z"/></svg></div>
   </div>
@@ -147,7 +148,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
         <div class="dealer"><div class="cards" id="dc"></div><div class="tot" id="dt" style="display:none"></div></div>
         <div class="player"><div class="hands" id="hands"></div></div>
       </div>
-      <div class="shoe"><svg viewBox="0 0 113 310" preserveAspectRatio="none"><rect x="90" y="0" width="60" height="310" rx="30" fill="#6f8bab" opacity=".9"/><g><rect x="8" y="26" width="92" height="5" rx="2.500" fill="#fff"/><rect x="6" y="33" width="94" height="5" rx="2.500" fill="#fff"/><rect x="4" y="40" width="96" height="5" rx="2.500" fill="#fff"/><rect x="0" y="48" width="100" height="218" rx="6" fill="#386fa9" stroke="#fff" stroke-width="5"/><path d="M12 76V68h40M12 232v8h40" fill="none" stroke="#85b6e2" stroke-width="2.400"/><rect x="2" y="50" width="9" height="9" rx="2" fill="#fff"/><rect x="2" y="255" width="9" height="9" rx="2" fill="#fff"/></g><rect x="90" y="0" width="60" height="310" rx="30" fill="#6f8bab" opacity=".9"/></svg></div>
+      <div class="shoe"><svg viewBox="0 0 113 310" preserveAspectRatio="none"><g opacity="0.86"><rect x="7.95" y="30.490000000000002" width="124.4" height="211.9" rx="3.4" fill="#36597f" stroke="#fff" stroke-width="3.6"/><rect x="6.15" y="28.69" width="14.5" height="13.8" rx="4.5" fill="#fff"/><rect x="9.9" y="31.69" width="7" height="6.6" rx="1.6" fill="#36597f"/></g><g opacity="0.86"><rect x="5.65" y="37.26" width="124.4" height="211.9" rx="3.4" fill="#36597f" stroke="#fff" stroke-width="3.6"/><rect x="3.85" y="35.46" width="14.5" height="13.8" rx="4.5" fill="#fff"/><rect x="7.6" y="38.46" width="7" height="6.6" rx="1.6" fill="#36597f"/></g><g opacity="0.86"><rect x="3.35" y="44.029999999999994" width="124.4" height="211.9" rx="3.4" fill="#36597f" stroke="#fff" stroke-width="3.6"/><rect x="1.55" y="42.23" width="14.5" height="13.8" rx="4.5" fill="#fff"/><rect x="5.3" y="45.23" width="7" height="6.6" rx="1.6" fill="#36597f"/></g><g opacity="1"><rect x="1.05" y="50.8" width="124.4" height="211.9" rx="3.4" fill="#3870a9" stroke="#fff" stroke-width="3.6"/><rect x="-0.75" y="49" width="14.5" height="13.8" rx="4.5" fill="#fff"/><rect x="3.0" y="52" width="7" height="6.6" rx="1.6" fill="#3870a9"/><g fill="none" stroke="#6b9cca" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M62.25 61.3H24.25V74.4H11.75V113"/><path d="M62.25 252.2H24.25V239.1H11.75V200.5"/></g></g><path d="M90 41.5A30 43.7 0 0 1 120 -2.2H150V312.2H120A30 43.7 0 0 1 90 268.5Z" fill="#5f7c9a"/><path d="M90 43.5A30 43.7 0 0 1 120 -2.2" fill="none" stroke="#9fbad7" stroke-width="1.8" opacity=".9"/><path d="M91 43V266" stroke="#9fbad7" stroke-width="2" opacity=".85"/></svg></div>
     </div>
 
     <div class="ctrl">
@@ -155,7 +156,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
       <div class="bets" id="bets">
         <div class="fld sel" id="f0" style="margin-top:14px"><span>$</span><input id="i0" inputmode="decimal" placeholder="0.00"><button class="sm" data-f="0" data-m="h">1/2</button><button class="sm" data-f="0" data-m="d">2x</button></div>
         <div class="chips" id="chips"></div>
-        <div class="lbl">Par perfecto</div>
+        <div class="lbl">Perfect Pairs</div>
         <div class="fld" id="f1"><span>$</span><input id="i1" inputmode="decimal" placeholder="0.00"><button class="sm" data-f="1" data-m="h">1/2</button><button class="sm" data-f="1" data-m="d">2x</button></div>
         <div class="lbl">21+3</div>
         <div class="fld" id="f2"><span>$</span><input id="i2" inputmode="decimal" placeholder="0.00"><button class="sm" data-f="2" data-m="h">1/2</button><button class="sm" data-f="2" data-m="d">2x</button></div>
@@ -166,7 +167,7 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
       <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.4-2.5 1a7 7 0 0 0-1.7-1L15 3h-4l-.4 3a7 7 0 0 0-1.7 1l-2.5-1-2 3.4L6.6 11a7.500 7.500 0 0 0 0 2l-2.100 1.600 2 3.400 2.500-1a7 7 0 0 0 1.700 1l.4 3h4l.4-3a7 7 0 0 0 1.700-1l2.500 1 2-3.400zM12 15.500a3.500 3.500 0 1 1 0-7 3.500 3.500 0 0 1 0 7z"/></svg>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.300 1.100 6.100L12 16.800 6.600 19.800l1.100-6.100L3.200 9.400l6.100-.8z"/></svg>
       <div class="mid" id="logoF"></div>
-      <div>Apuestas secundarias<button class="sw" id="sw"></button></div>
+      <div>Side bets<button class="sw" id="sw"></button></div>
     </div>
   </div>
   <div class="spacer"></div>
@@ -186,7 +187,7 @@ let uid=0,shoe=[],dealer=[],hands=[],hi=0,phase='idle',reveal=false,side=true,ta
 let balance=1000;
 try{const s=localStorage.getItem('bj_bal');if(s!==null&&!isNaN(+s))balance=+s}catch(e){}
 const save=()=>{try{localStorage.setItem('bj_bal',balance)}catch(e){}};
-const fmt=n=>'$'+n.toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:2});
+const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2});
 const num=i=>{const v=parseFloat(String($('i'+i).value).replace(',','.'));return isNaN(v)||v<0?0:Math.round(v*100)/100};
 const setf=(i,v)=>{$('i'+i).value=v?(+v.toFixed(2)).toString():''};
 function newShoe(){shoe=[];for(let d=0;d<6;d++)for(let r=0;r<13;r++)for(let s=0;s<4;s++)shoe.push({r,s,id:++uid});
@@ -225,33 +226,33 @@ function render(){
   acts();
 }
 const ICON={
-  hit:'<svg viewBox="0 0 24 24" fill="#2b9af0"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 12h6M12 9v6" stroke="#fff" stroke-width="2"/></svg>',
-  stand:'<svg viewBox="0 0 24 24" fill="#c08cff"><path d="M8 11V5a1.500 1.500 0 0 1 3 0v5h1V3.500a1.500 1.500 0 0 1 3 0V10h1V5.500a1.500 1.500 0 0 1 3 0V14c0 5-3 8-7 8-3 0-5-2-6-4l-2-4a1.500 1.500 0 0 1 2.500-1.500L8 14z"/></svg>',
-  split:'<svg viewBox="0 0 24 24" fill="#a0693a"><rect x="3" y="4" width="8" height="16" rx="2"/><rect x="13" y="4" width="8" height="16" rx="2"/></svg>'};
+  hit:'<svg width="12" height="17" viewBox="0 0 12 17"><rect x="0" y="0" width="8.2" height="12.4" rx="1.5" fill="#50a0ff"/><path d="M6.4 5.6H8.1L11.5 8.4Q12 8.8 12 9.5V16Q12 17 11 17H5.6V15.1L3.4 14.3V11.4H6.4Z" fill="#50a0ff" stroke="#181e38" stroke-width=".7" stroke-linejoin="round" paint-order="stroke"/><path d="M10 8.9L7.9 8.2Q5.9 8 5.3 9.4Q4.9 10.9 6.6 11.4Q8.7 11.9 8.4 13.2Q8.1 14 7 13.9" fill="none" stroke="#181e38" stroke-width="1.2" stroke-linecap="round"/></svg>',
+  stand:'<svg width="13" height="16.5" viewBox="0 0 13 16.5" fill="#c591f3"><rect x="3.3" y="1.2" width="1.8" height="8" rx=".9"/><rect x="6" y="0" width="1.8" height="9" rx=".9"/><rect x="8.5" y=".6" width="1.8" height="8.6" rx=".9"/><rect x="11" y="2.6" width="2" height="7" rx="1"/><path d="M3.3 7.9H13V11.6Q13 16.5 8.4 16.5Q5.4 16.5 4 14.2L.4 10.1Q-.2 9.2 .7 8.6Q1.6 8.2 2.3 8.9L3.3 10Z"/></svg>',
+  split:'<svg width="14" height="10.4" viewBox="0 0 14 10.4" fill="#f79649"><rect x=".4" y=".6" width="6" height="9.2" rx="1.3" transform="rotate(-7 3.4 5.2)"/><rect x="7.6" y=".6" width="6" height="9.2" rx="1.3" transform="rotate(7 10.6 5.2)"/></svg>'};
 function acts(){
   const a=$('acts');
-  if(phase==='idle'){a.innerHTML='<button class="ab wide" id="bDeal">Apostar</button>';$('bDeal').onclick=start;return}
-  if(phase==='ins'){a.innerHTML=`<button class="ab" style="grid-column:1/3" id="bYes">Seguro (${fmt(hands[0].bet/2)})</button><button class="ab" style="grid-column:3/5" id="bNo">Sin seguro</button>`;
+  if(phase==='idle'){a.innerHTML='<button class="ab wide" id="bDeal">Bet</button>';$('bDeal').onclick=start;return}
+  if(phase==='ins'){a.innerHTML=`<button class="ab" style="grid-column:1/3" id="bYes">Insurance (${fmt(hands[0].bet/2)})</button><button class="ab" style="grid-column:3/5" id="bNo">No insurance</button>`;
     $('bYes').onclick=()=>insure(true);$('bNo').onclick=()=>insure(false);return}
   const h=hands[hi],play=phase==='play'&&h;
   const cd=play&&h.cards.length===2&&balance>=h.bet, cs=cd&&hands.length===1&&cv(h.cards[0])===cv(h.cards[1]);
-  a.innerHTML=`<button class="ab" id="bD" ${cd?'':'disabled'}><span class="x2">x2</span>Doblar</button>
-  <button class="ab" id="bH" ${play?'':'disabled'}>${ICON.hit}Pedir una carta</button>
-  <button class="ab" id="bS" ${play?'':'disabled'}>${ICON.stand}Plantarse</button>
-  <button class="ab" id="bP" ${cs?'':'disabled'}>${ICON.split}Dividir</button>`;
+  a.innerHTML=`<button class="ab" id="bD" ${cd?'':'disabled'}><span class="ic"><span class="x2">x2</span></span>Double</button>
+  <button class="ab" id="bH" ${play?'':'disabled'}><span class="ic">${ICON.hit}</span>Hit</button>
+  <button class="ab" id="bS" ${play?'':'disabled'}><span class="ic">${ICON.stand}</span>Stand</button>
+  <button class="ab" id="bP" ${cs?'':'disabled'}><span class="ic">${ICON.split}</span>Split</button>`;
   $('bD').onclick=dbl;$('bH').onclick=hit;$('bS').onclick=stand;$('bP').onclick=split;
 }
 function start(){
   const b=num(0),pp=side?num(1):0,t3=side?num(2):0;
-  if(b<=0){say('Ingresa una apuesta','lose');return}
-  if(b+pp+t3>balance+1e-9){say('Saldo insuficiente','lose');return}
+  if(b<=0){say('Enter a bet','lose');return}
+  if(b+pp+t3>balance+1e-9){say('Insufficient balance','lose');return}
   balance-=b+pp+t3;save();hush();reveal=false;
   hands=[{cards:[],bet:b}];dealer=[];hi=0;dres='';dshown=false;
   hands[0].cards.push(draw());dealer.push(draw());hands[0].cards.push(draw());dealer.push(draw());
   let note=[];
   if(pp>0){const [x,y]=hands[0].cards;let m=0;
     if(x.r===y.r)m=x.s===y.s?25:(((x.s===1||x.s===2)===(y.s===1||y.s===2))?12:5);
-    if(m){balance+=pp*(m+1);note.push('Par perfecto +'+fmt(pp*m))}}
+    if(m){balance+=pp*(m+1);note.push('Perfect Pair +'+fmt(pp*m))}}
   if(t3>0){const cs=[hands[0].cards[0],hands[0].cards[1],dealer[0]];const rs=cs.map(c=>c.r).sort((a,b)=>a-b);
     const fl=cs.every(c=>c.s===cs[0].s),tr=rs[0]===rs[2];
     const st=(new Set(rs).size===3)&&((rs[2]-rs[0]===2)||(rs[0]===0&&rs[1]===11&&rs[2]===12));
@@ -269,7 +270,7 @@ function insure(y){
   if(y){const c=hands[0].bet/2;if(balance>=c){balance-=c;hands[0].ins=c;save()}}
   phase='play';
   if(isBJ(dealer)||isBJ(hands[0].cards)){finish();return}
-  if(y)say('Sin blackjack del crupier','lose');render()}
+  if(y)say('Dealer has no blackjack','lose');render()}
 function hit(){const h=hands[hi];h.cards.push(draw());if(score(h.cards)>=21)next();else render()}
 function stand(){next()}
 function dbl(){const h=hands[hi];balance-=h.bet;h.bet*=2;h.dbl=true;h.cards.push(draw());save();next()}
@@ -300,7 +301,7 @@ function settle(){
   dres=hands.some(h=>h.out==='push')?'y':'';dshown=false;
   balance+=paid;save();phase='idle';
   const keep=hands;render();
-  if(balance<=0)say('Sin saldo · toca la billetera','lose');
+  if(balance<=0)say('Out of balance · tap the wallet','lose');
   const b=num(0);if(b>balance)setf(0,balance);
 }
 /* ui wiring */
@@ -318,12 +319,12 @@ function chipSVG(v,c){
   const fs=v.length>2?25:v.length>1?30:34;
   return `<svg viewBox="-50 -50 100 106" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="5" r="49" fill="${c.edge}"/><circle cx="0" cy="0" r="49" fill="${c.body}"/><circle cx="0" cy="0" r="49" fill="none" stroke="#000" stroke-opacity=".06" stroke-width="1"/>${n}<circle cx="0" cy="0" r="30.5" fill="${c.face}"/><circle cx="0" cy="0" r="28.5" fill="none" stroke="${c.ring}" stroke-width="2.2" stroke-dasharray="5.2 3.4" stroke-opacity=".95"/><text x="0" y="0" text-anchor="middle" dominant-baseline="central" dy=".02em" font-family="Montserrat,system-ui,-apple-system,sans-serif" font-weight="700" font-size="${fs}" fill="${c.txt}">${v}</text></svg>`}
 CHIPS.forEach(([v,c])=>{
-  const b=document.createElement('button');b.className='chip';b.innerHTML=chipSVG(v,c);b.setAttribute('aria-label','Ficha '+v);
+  const b=document.createElement('button');b.className='chip';b.innerHTML=chipSVG(v,c);b.setAttribute('aria-label','Chip '+v);
   b.onclick=()=>{if(phase!=='idle')return;setf(target,num(target)+ +v)};$('chips').appendChild(b)});
 document.querySelectorAll('.sm').forEach(b=>b.onclick=()=>{const i=+b.dataset.f,v=num(i);setf(i,b.dataset.m==='h'?v/2:v*2)});
 [0,1,2].forEach(i=>{$('i'+i).addEventListener('focus',()=>{target=i;render()});$('f'+i).addEventListener('click',()=>{target=i;[0,1,2].forEach(j=>$('f'+j).classList.toggle('sel',j===i))})});
 $('sw').onclick=()=>{side=!side;if(!side){setf(1,0);setf(2,0)}render()};
-$('wallet').onclick=()=>{if(confirm('¿Reiniciar saldo ficticio a $1000?')){balance=1000;save();render()}};
+$('wallet').onclick=()=>{if(confirm('Reset play balance to $1000?')){balance=1000;save();render()}};
 function fit(){const t=document.querySelector('.table');const H=t.clientHeight,W=t.clientWidth;
   const fixed=2*(34+10)+60+H*.06;let cw=Math.min((H-fixed)/3,W*.17,72);cw=Math.max(cw,28);t.style.setProperty('--cw',cw+'px')}
 new ResizeObserver(fit).observe(document.querySelector('.table'));addEventListener('resize',fit);
