@@ -352,8 +352,9 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:0}
 .chip.on::before{content:"";position:absolute;left:-1px;top:.7px;width:38px;height:38px;border:2px solid #7d829c;border-radius:50%;box-sizing:border-box;z-index:-1}
 
 /* ===== modo app (pantalla de inicio): ocupar TODA la pantalla, barras bien ancladas ===== */
-html,body{position:fixed;inset:0;width:100%;height:100%;background:#0f1228}
-#app{height:100%}
+html{height:100%;background:#0f1228}
+body{position:static;margin:0;width:100%;height:100%;overflow:hidden;background:#0f1228}
+#app{position:fixed;top:0;bottom:0;left:0;right:0;margin:0 auto;width:100%;height:auto}
 .top{flex:none}
 .nav{flex:none;margin-top:0}
 </style>
