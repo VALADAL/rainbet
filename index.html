@@ -1291,18 +1291,17 @@ dr.addEventListener('click',e=>{const r=e.target.closest('[data-go]');if(!r)retu
  else toast((r.textContent.trim().replace(/NEW$/,'').trim()||'Menú')+' · próximamente')});
 })();
 </script>
-<style id="fitCss">html.fit,html.fit body{inset:0 0 auto 0;height:var(--ah)}html.fit #app{height:var(--ah)}</style>
+<style id="fitCss">html,body{background:#181d35}html.gap .nav{padding-bottom:3px}</style>
 <script id="fitJs">
 (function(){
- var de=document.documentElement,pr;
+ var de=document.documentElement;
  var standalone=function(){return navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)};
+ /* iOS (pantalla de inicio): el viewport puede medir menos que la pantalla; ese hueco se pinta con el color de fondo de html,
+    asi que lo igualamos al de la barra y quitamos el relleno extra de la barra de abajo para que no quede tan alta */
  function fit(){
-  if(!standalone()||!(window.matchMedia&&matchMedia('(orientation: portrait)').matches)){de.classList.remove('fit');return}
-  if(!pr){pr=document.createElement('div');pr.style.cssText='position:fixed;left:0;top:0;width:1px;bottom:0;visibility:hidden;pointer-events:none';document.body.appendChild(pr)}
-  de.classList.remove('fit');
-  var h=pr.getBoundingClientRect().height,sh=Math.max(screen.height,screen.width);
-  /* iOS (pantalla de inicio): a veces el viewport mide menos que la pantalla y queda un hueco abajo */
-  if(sh-h>4&&sh-h<140){de.style.setProperty('--ah',sh+'px');de.classList.add('fit')}
+  var sh=Math.max(screen.height,screen.width),h=innerHeight;
+  var gap=standalone()&&matchMedia('(orientation: portrait)').matches&&sh-h>4&&sh-h<140;
+  de.classList.toggle('gap',gap);
  }
  function again(){fit();setTimeout(fit,150);setTimeout(fit,600)}
  addEventListener('load',again);addEventListener('pageshow',again);addEventListener('resize',again);addEventListener('orientationchange',again);
