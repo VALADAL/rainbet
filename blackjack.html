@@ -357,6 +357,29 @@ body{position:static;margin:0;width:100%;height:100%;overflow:hidden;background:
 #app{position:fixed;top:0;bottom:0;left:0;right:0;margin:0 auto;width:100%;height:auto}
 .top{flex:none}
 .nav{flex:none;margin-top:0}
+
+/* ===== animaciones de cartas (reparto, volteo, recogida) ===== */
+.c3{position:relative;flex:none;width:var(--cw);height:calc(var(--cw) * 1.5)}
+.cf{position:absolute;top:0;right:0;bottom:0;left:0;perspective:calc(var(--cw) * 5);-webkit-perspective:calc(var(--cw) * 5)}
+.ci{position:absolute;top:0;right:0;bottom:0;left:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d}
+.ci.down{transform:rotateY(180deg)}
+.ci .card{position:absolute;top:0;right:0;bottom:0;left:0;width:auto;height:auto;box-sizing:border-box;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.ci .card.back{transform:rotateY(180deg)}
+.fxl{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:0}
+.fxl .c3{position:absolute}
+/* ===== panel Take Insurance (igual a la captura) ===== */
+.insp{position:absolute;top:0;right:0;bottom:0;left:0;z-index:6;display:none;background:#242856;color:#fff;font-family:var(--font)}
+.insp.on{display:block}
+.insp .it{position:absolute;left:0;right:0;top:4.6cqw;display:flex;justify-content:center;align-items:center;gap:1.2cqw;font-size:3.2cqw;font-weight:600;line-height:1}
+.insp .it svg{width:3.7cqw;height:4.2cqw;fill:none;stroke:#7ee2a0;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.insp .itot{position:absolute;left:0;right:0;top:10.7cqw;text-align:center;font-size:3cqw;font-weight:500;line-height:4.2cqw;color:#e4e6fa}
+.insp .itot b{font-weight:700;color:#fff}
+.insp .iby{position:absolute;left:2.5cqw;right:2.5cqw;top:16.8cqw;display:grid;grid-template-columns:1fr 1fr;gap:2.2cqw}
+.insp .iby button{height:9.7cqw;border-radius:1.2cqw;background:#2b3159;color:#fff;font-size:3.1cqw;font-weight:500;border:0}
+.insp .iby button:active{filter:brightness(1.25)}
+.insp .iln{position:absolute;left:2.5cqw;right:2.5cqw;top:28.7cqw;height:1px;background:#353b6f}
+.insp .iinf{position:absolute;left:2.8cqw;right:2.8cqw;top:30.6cqw;display:flex;align-items:center;gap:2.5cqw;color:#8d92c3;font-size:2.85cqw;font-weight:400;line-height:4cqw}
+.insp .iinf svg{flex:none;width:3.4cqw;height:3.4cqw;fill:none;stroke:#767bb0;stroke-width:1.7;stroke-linecap:round}
 </style>
 <style id="lobbyCss">
 #lobby .sl{display:flex;overflow-x:auto;gap:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 12px;scroll-snap-type:x mandatory;scroll-padding-left:12px}
@@ -479,7 +502,14 @@ body[data-v="lobby"] .info{margin-top:28px}
     </div>
 
     <div class="ctrl">
-      <button class="deal" id="bDeal">Place Bet</button>
+      <div class="insp" id="insP">
+        <div class="it"><svg viewBox="0 0 24 24"><path d="M12 2.6l7.6 2.9v5.9c0 4.7-3.2 8.4-7.6 10-4.4-1.6-7.6-5.3-7.6-10V5.5z"/><path d="M8.2 12.1l2.6 2.6 5-5.3"/></svg><span>Take Insurance</span></div>
+        <div class="itot">Total: <b id="insT">$0.00</b></div>
+        <div class="iby"><button id="bYes">Yes</button><button id="bNo">No</button></div>
+        <div class="iln"></div>
+        <div class="iinf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5v.01"/></svg><span>Insurance pays 2:1 if the dealer gets a blackjack. Otherwise, it pushes.</span></div>
+      </div>
+      <button class="deal" id="bDeal">Place Demo Bet</button>
       <div class="acts" id="acts"></div>
       <div class="bets" id="bets">
         <div class="fld sel" id="f0"><div class="tip">Insufficient balance</div><div class="fa"><span>$</span><input id="i0" inputmode="decimal" placeholder="0.00"></div><div class="fc" id="fc0"></div><div class="hb"><span>1/2</span><span>2x</span></div><button class="fx" id="fx0" aria-label="Clear bet"><svg viewBox="0 0 6 6"><path d="M.5.5l5 5M5.5.5l-5 5"/></svg></button></div>
@@ -567,32 +597,116 @@ const num=i=>{const v=parseFloat(String($('i'+i).value).replace(',','.'));return
 const setf=(i,v)=>{$('i'+i).value=v?(+v.toFixed(2)).toString():''};
 function newShoe(){shoe=[];for(let d=0;d<6;d++)for(let r=0;r<13;r++)for(let s=0;s<4;s++)shoe.push({r,s,id:++uid});
   for(let i=shoe.length-1;i>0;i--){const j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[shoe[i],shoe[j]]=[shoe[j],shoe[i]]}}
-const draw=()=>{if(shoe.length<60)newShoe();return shoe.pop()};
+let demo=false;   // true = ronda de prueba sin dinero (apuesta en 0)
+let dn=0;
+const draw=()=>{if(shoe.length<60)newShoe();const c=shoe.pop();c.n=++dn;return c};
 const cv=c=>c.r===0?11:Math.min(c.r+1,10);
 function score(cs){let t=0,a=0;cs.forEach(c=>{t+=cv(c);if(c.r===0)a++});while(t>21&&a--)t-=10;return t}
 const isBJ=h=>h.length===2&&score(h)===21;
-function cardHTML(c,hide){
-  if(hide)return `<div class="card back">${logo('width:80%;max-height:80%')}</div>`;
-  const cls='card'+(c.s===1||c.s===2?' r':'')+(c.shown?'':' in');c.shown=true;
-  return `<div class="${cls}"><span>${RK[c.r]}</span><small>${SU[c.s]}</small></div>`}
+/* ===== ANIMACIONES DE CARTAS =====
+   Cada carta es un elemento que se crea UNA vez (c.el) y se reutiliza,
+   asi las animaciones no se cortan cuando se vuelve a dibujar la mesa. */
+const FLY=480, STEP=330, FLIPT=320, SLIDE=240, SWEEP=480;  // tiempos en ms
+let qT=0, animEnd=0, rt=0;   // qT = cuando sale la proxima carta; animEnd = cuando termina todo
+const salio=c=>c.t0!==undefined&&c.t0<=performance.now()+8;      // ya salio del shoe
+const llego=c=>c.landAt!==undefined&&c.landAt<=performance.now()+8; // ya cayo en la mesa
+const ocupado=()=>performance.now()<animEnd;
+function sayLater(t,k){setTimeout(()=>say(t,k),Math.max(0,animEnd-performance.now()))}
+function cardEl(c){
+  if(!c.el){
+    const d=document.createElement('div');d.className='c3';
+    d.innerHTML=`<div class="cf"><div class="ci down"><div class="card${c.s===1||c.s===2?' r':''}"><span>${RK[c.r]}</span><small>${SU[c.s]}</small></div><div class="card back">${logo('width:80%;max-height:80%')}</div></div></div>`;
+    c.el=d}
+  return c.el}
+function syncCards(box,list){   // deja en 'box' solo esas cartas, en orden, sin recrearlas
+  [...box.children].forEach(e=>{if(!list.includes(e))e.remove()});
+  list.forEach((e,i)=>{if(box.children[i]!==e)box.insertBefore(e,box.children[i]||null)})}
+function shoePos(r){   // cuanto hay que mover una carta (rect r) para llevarla al shoe
+  const s=document.querySelector('.shoe').getBoundingClientRect();
+  return [s.left+s.width*.15-(r.left+r.width/2), s.top+s.height/2-(r.top+r.height/2)]}
+function volar(c){     // la carta asoma por el shoe, sale girada y cae en su lugar
+  const r=c.el.getBoundingClientRect(),s=document.querySelector('.shoe').getBoundingClientRect();
+  const sx=s.left-r.width*.3+r.height/2-(r.left+r.width/2);   // posicion inicial: solo asoma un poco
+  const sy=s.top+s.height/2-(r.top+r.height/2);
+  c.el.firstChild.animate([
+    {transform:`translate(${sx}px,${sy}px) rotate(90deg)`},
+    {transform:`translate(${sx}px,${sy}px) rotate(90deg)`,offset:.16},
+    {transform:'translate(0px,0px) rotate(-4deg)',offset:.85},
+    {transform:'none'}],{duration:FLY,easing:'cubic-bezier(.25,.7,.3,1)'})}
+function voltear(c){   // flip: boca abajo -> boca arriba cuando la carta ya cayo
+  const now=performance.now(),d=Math.max(0,c.landAt-now)+30;
+  c.el.firstChild.firstChild.animate([
+    {transform:'rotateY(180deg) scale(1)'},
+    {transform:'rotateY(90deg) scale(1.06)',offset:.5},
+    {transform:'rotateY(0deg) scale(1)'}],{duration:FLIPT,delay:d,easing:'ease-in-out',fill:'backwards'});
+  animEnd=Math.max(animEnd,now+d+FLIPT)}
+function sweep(){      // al empezar otra ronda: las cartas se desvanecen y salen (dealer arriba, jugador abajo)
+  const olds=[...document.querySelectorAll('#dc .c3,#hands .c3')];
+  if(!olds.length)return 0;
+  const tb=document.querySelector('.table'),tr=tb.getBoundingClientRect();
+  let fx=tb.querySelector('.fxl');if(!fx){fx=document.createElement('div');fx.className='fxl';tb.appendChild(fx)}
+  olds.forEach(e=>{if(e._fl)e._fl.cancel()});
+  const rects=olds.map(e=>e.getBoundingClientRect());   // 1) medir TODAS antes de mover alguna (si no, se recorren)
+  const arriba=olds.map(e=>!!e.closest('#dc'));
+  let nd=0,np=0;
+  olds.forEach((e,k)=>{                                  // 2) cada carta se queda donde estaba y sale en vertical
+    const r=rects[k],up=arriba[k],i=up?nd++:np++;        // la carta izquierda sale primero
+    const d=up?-(r.bottom-tr.top+10):(tr.bottom-r.top+10);
+    fx.appendChild(e);
+    e.style.cssText=`position:absolute;left:${r.left-tr.left}px;top:${r.top-tr.top}px;width:${r.width}px;height:${r.height}px`;
+    e.firstChild.animate([{transform:'none',opacity:1},{transform:`translateY(${d}px)`,opacity:0}],
+      {duration:SWEEP,delay:i*110,easing:'cubic-bezier(.3,0,.7,1)',fill:'both'});
+    setTimeout(()=>e.remove(),SWEEP+i*110+120)});
+  return SWEEP*.75+(Math.max(nd,np)-1)*110}
+function kick(){       // programa otro render cuando pase el siguiente evento (salida, caida, fin)
+  clearTimeout(rt);
+  const now=performance.now();let nx=Infinity;
+  dealer.concat(...hands.map(h=>h.cards)).forEach(c=>[c.t0,c.landAt].forEach(t=>{if(t>now+8&&t<nx)nx=t}));
+  if(animEnd>now+8&&animEnd<nx)nx=animEnd;
+  if(nx<Infinity)rt=setTimeout(render,nx-now+10)}
 function label(cs){let t=0,a=0;cs.forEach(c=>{t+=cv(c);if(c.r===0)a++});while(t>21&&a>0){t-=10;a--}return a>0&&t<21?(t-10)+' / '+t:String(t)}
 function say(t,k){const m=$('msg');m.textContent=t;m.className='msg show '+(k||'');}
 function hush(){$('msg').className='msg'}
 function render(){
+  const now=performance.now();
   $('bal').textContent='$'+balance.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-  const hid=(phase==='play'||phase==='ins')&&!reveal;
-  $('dc').innerHTML=dealer.map((c,i)=>cardHTML(c,hid&&i===1)).join('');
-  const dt=$('dt');dt.style.display=dealer.length?'flex':'none';
+  const hid=!reveal&&(phase==='play'||phase==='ins'||phase==='dealer');
+  // 1) posicion actual de las cartas (para que se deslicen cuando la mesa se reacomoda)
+  const antes=new Map();
+  document.querySelectorAll('#dc .c3,#hands .c3').forEach(e=>{antes.set(e,e.getBoundingClientRect());if(e._fl)e._fl.cancel()});
+  // 2) las cartas nuevas reciben su turno de salida, en el orden en que se repartieron
+  const todas=dealer.concat(...hands.map(h=>h.cards));
+  todas.filter(c=>c.t0===undefined).sort((a,b)=>a.n-b.n).forEach(c=>{
+    const t=Math.max(now,qT);c.t0=t;c.landAt=t+FLY;qT=t+STEP;animEnd=Math.max(animEnd,c.landAt+40)});
+  // 3) dealer
+  syncCards($('dc'),dealer.filter(salio).map(cardEl));
+  const dl=dealer.filter(llego);
+  const dt=$('dt');dt.style.display=dl.length?'flex':'none';
   const dan=!!dres&&!dshown;if(dres)dshown=true;
   dt.className='tot'+(dres?' res '+dres+(dan?' anim':''):'');
-  dt.innerHTML='<span class="n">'+(hid?cv(dealer[0]):label(dealer))+'</span>'+(dres?'<span class="lw"><span>Tie</span></span>':'');
+  dt.innerHTML='<span class="n">'+(hid?label([dl[0]||dealer[0]]):label(dl))+'</span>'+(dres?'<span class="lw"><span>Tie</span></span>':'');
   $('dc').classList.toggle('rt',dres==='y');
-  $('hands').innerHTML=hands.map((h,i)=>{const s=score(h.cards),bust=s>21;
-    let tc='tot',lbl='',hc='';
+  // 4) manos del jugador (se reutilizan los elementos; solo se actualizan)
+  const hc=$('hands');
+  while(hc.children.length>hands.length)hc.lastChild.remove();
+  while(hc.children.length<hands.length){const d=document.createElement('div');d.className='hand';d.innerHTML='<div class="tot"><span class="n"></span></div><div class="cards"></div>';hc.appendChild(d)}
+  hands.forEach((h,i)=>{const hd=hc.children[i],tot=hd.children[0],box=hd.children[1],s=score(h.cards),bust=s>21;
+    let tc='tot',lbl='',hcl='';
     if(h.out){const an=!h.shown;h.shown=true;
       const m={bj:['w','Blackjack','rw'],w:['w','Win','rw'],push:['y',h.dbl?'Double':'Tie','rt'],l:['l',bust?'':(h.dbl?'Double':'Stand'),'rl']}[h.out];
-      tc+=' res '+m[0]+(an?' anim':'');lbl=m[1];hc=' '+m[2]}
-    return `<div class="hand${hc}${hands.length>1&&i===hi&&phase==='play'?' act':''}"><div class="${tc}"><span class="n">${label(h.cards)}</span>${lbl?`<span class="lw"><span>${lbl}</span></span>`:''}</div><div class="cards">${h.cards.map(c=>cardHTML(c)).join('')}</div></div>`}).join('');
+      tc+=' res '+m[0]+(an?' anim':'');lbl=m[1];hcl=' '+m[2]}
+    const hl=h.cards.filter(llego);
+    tot.className=tc;tot.style.visibility=hl.length?'':'hidden';
+    tot.innerHTML=`<span class="n">${label(hl)}</span>${lbl?`<span class="lw"><span>${lbl}</span></span>`:''}`;
+    hd.className='hand'+hcl+(hands.length>1&&i===hi&&phase==='play'?' act':'');
+    syncCards(box,h.cards.filter(salio).map(cardEl))});
+  // 5) animaciones: salida del shoe + flip + deslizar las cartas que ya estaban
+  todas.filter(salio).forEach(c=>{
+    if(!c.lanzada){c.lanzada=true;volar(c)}
+    if(!(dealer[1]===c&&hid)&&!c.up){c.up=true;c.el.firstChild.firstChild.classList.remove('down');voltear(c)}});
+  antes.forEach((a,e)=>{if(!e.parentNode||!e.closest('#dc,#hands'))return;
+    const b=e.getBoundingClientRect(),dx=a.left-b.left,dy=a.top-b.top;
+    if(Math.abs(dx)>1||Math.abs(dy)>1)e._fl=e.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:SLIDE,easing:'ease-out'})});
   document.querySelector('.oval').classList.toggle('bj',hands.length===1&&hands[0].out==='bj');
   $('bets').className='bets'+(phase==='idle'?'':' off');
   [0,1,2].forEach(i=>$('f'+i).classList.toggle('sel',i===target));
@@ -600,17 +714,18 @@ function render(){
   $('f1').previousElementSibling.style.display=$('f1').style.display=$('f2').style.display=$('f2').previousElementSibling.style.display=side?'':'none';
   $('sw').className='sw'+(side?'':' off');
   acts();
+  kick();
 }
 const ICON={
   hit:'<svg width="12" height="17" viewBox="0 0 12 17"><rect x="0" y="0" width="8.2" height="12.4" rx="1.5" fill="#50a0ff"/><path d="M6.4 5.6H8.1L11.5 8.4Q12 8.8 12 9.5V16Q12 17 11 17H5.6V15.1L3.4 14.3V11.4H6.4Z" fill="#50a0ff" stroke="#181e38" stroke-width=".7" stroke-linejoin="round" paint-order="stroke"/><path d="M10 8.9L7.9 8.2Q5.9 8 5.3 9.4Q4.9 10.9 6.6 11.4Q8.7 11.9 8.4 13.2Q8.1 14 7 13.9" fill="none" stroke="#181e38" stroke-width="1.2" stroke-linecap="round"/></svg>',
   stand:'<svg width="13" height="16.5" viewBox="0 0 13 16.5" fill="#c591f3"><rect x="3.3" y="1.2" width="1.8" height="8" rx=".9"/><rect x="6" y="0" width="1.8" height="9" rx=".9"/><rect x="8.5" y=".6" width="1.8" height="8.6" rx=".9"/><rect x="11" y="2.6" width="2" height="7" rx="1"/><path d="M3.3 7.9H13V11.6Q13 16.5 8.4 16.5Q5.4 16.5 4 14.2L.4 10.1Q-.2 9.2 .7 8.6Q1.6 8.2 2.3 8.9L3.3 10Z"/></svg>',
   split:'<svg width="14" height="10.4" viewBox="0 0 14 10.4" fill="#f79649"><rect x=".4" y=".6" width="6" height="9.2" rx="1.3" transform="rotate(-7 3.4 5.2)"/><rect x="7.6" y=".6" width="6" height="9.2" rx="1.3" transform="rotate(7 10.6 5.2)"/></svg>'};
 function acts(){
-  const a=$('acts');
-    if(phase==='ins'){a.innerHTML=`<button class="ab" style="grid-column:1/3;justify-content:center;padding:0" id="bYes">Insurance (${fmt(hands[0].bet/2)})</button><button class="ab" style="grid-column:3/5;justify-content:center;padding:0" id="bNo">No insurance</button>`;
-    $('bYes').onclick=()=>insure(true);$('bNo').onclick=()=>insure(false);return}
-  const h=hands[hi],play=phase==='play'&&h;
-  const cd=play&&h.cards.length===2&&balance>=h.bet, cs=cd&&hands.length===1&&cv(h.cards[0])===cv(h.cards[1]);
+  const a=$('acts'),busy=ocupado();
+  $('insP').classList.toggle('on',phase==='ins'&&!busy);   // panel Take Insurance
+  if(phase==='ins')$('insT').textContent='$'+(demo?0:hands[0].bet/2).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const h=hands[hi],play=phase==='play'&&h&&!busy;
+  const cd=play&&h.cards.length===2&&(demo||balance>=h.bet), cs=cd&&hands.length===1&&cv(h.cards[0])===cv(h.cards[1]);
   a.innerHTML=`<button class="ab" id="bD" ${cd?'':'disabled'}><span class="ic"><span class="x2">x2</span></span>Double</button>
   <button class="ab" id="bH" ${play?'':'disabled'}><span class="ic">${ICON.hit}</span>Hit</button>
   <button class="ab" id="bS" ${play?'':'disabled'}><span class="ic">${ICON.stand}</span>Stand</button>
@@ -618,10 +733,11 @@ function acts(){
   $('bD').onclick=dbl;$('bH').onclick=hit;$('bS').onclick=stand;$('bP').onclick=split;
 }
 function start(){
-  const b=num(0),pp=side?num(1):0,t3=side?num(2):0;
-  if(b<=0)return;
-  if(b+pp+t3>balance+1e-9){say('Insufficient balance','lose');return}
-  balance-=b+pp+t3;save();hush();reveal=false;
+  demo=!(num(0)>0);   // sin dinero apostado = Place Demo Bet
+  const b=demo?1:num(0),pp=!demo&&side?num(1):0,t3=!demo&&side?num(2):0;   // en demo la apuesta es solo simbolica
+  if(!demo&&b+pp+t3>balance+1e-9){say('Insufficient balance','lose');return}
+  if(!demo)balance-=b+pp+t3;save();hush();reveal=false;
+  qT=performance.now()+sweep();   // las cartas de la ronda anterior regresan al shoe
   hands=[{cards:[],bet:b}];dealer=[];hi=0;dres='';dshown=false;
   hands[0].cards.push(draw());dealer.push(draw());hands[0].cards.push(draw());dealer.push(draw());
   let note=[];
@@ -639,17 +755,17 @@ function start(){
   peek(note);
   function peek(n){
     if(cv(dealer[0])===10&&isBJ(dealer)||isBJ(hands[0].cards)){finish();return}
-    if(n.length)say(n.join(' · '),'win');render()}
+    render();if(n.length)sayLater(n.join(' · '),'win')}
 }
 function insure(y){
-  if(y){const c=hands[0].bet/2;if(balance>=c){balance-=c;hands[0].ins=c;save()}}
+  if(y){const c=hands[0].bet/2;if(demo||balance>=c){if(!demo)balance-=c;hands[0].ins=c;save()}}
   phase='play';
   if(isBJ(dealer)||isBJ(hands[0].cards)){finish();return}
   if(y)say('Dealer has no blackjack','lose');render()}
 function hit(){const h=hands[hi];h.cards.push(draw());if(score(h.cards)>=21)next();else render()}
 function stand(){next()}
-function dbl(){const h=hands[hi];balance-=h.bet;h.bet*=2;h.dbl=true;h.cards.push(draw());save();next()}
-function split(){const h=hands[0];balance-=h.bet;save();
+function dbl(){const h=hands[hi];if(!demo)balance-=h.bet;h.bet*=2;h.dbl=true;h.cards.push(draw());save();next()}
+function split(){const h=hands[0];if(!demo)balance-=h.bet;save();
   const c2=h.cards.pop();hands=[{cards:[h.cards[0],draw()],bet:h.bet,sp:1},{cards:[c2,draw()],bet:h.bet,sp:1}];hi=0;
   if(score(hands[0].cards)===21)next();else render()}
 function next(){
@@ -657,11 +773,12 @@ function next(){
   if(hi<hands.length-1){hi++;if(score(hands[hi].cards)===21){next();return}render();return}
   finish()}
 function finish(){
-  phase='dealer';reveal=true;render();
+  phase='dealer';render();   // la carta oculta sigue boca abajo hasta que terminen las animaciones
   const live=hands.some(h=>score(h.cards)<=21&&!(isBJ(h.cards)&&!h.sp));
+  const pausa=ms=>Math.max(ms,animEnd-performance.now()+150);   // espera a que termine lo que se esta animando
   const step=()=>{
-    if(live&&score(dealer)<17){dealer.push(draw());render();setTimeout(step,650)}else settle()};
-  setTimeout(step,600)}
+    if(live&&score(dealer)<17){dealer.push(draw());render();setTimeout(step,pausa(450))}else settle()};
+  setTimeout(()=>{reveal=true;render();setTimeout(step,pausa(450))},pausa(300))}
 function settle(){
   const d=score(dealer),dbj=isBJ(dealer);let net=0,paid=0;
   hands.forEach(h=>{const s=score(h.cards),bj=isBJ(h.cards)&&!h.sp;let m=0,p=0;
@@ -674,7 +791,7 @@ function settle(){
     p+=m;h.out=m>h.bet?(bj?'bj':'w'):m===h.bet?'push':'l';h.shown=false;
     paid+=p;net+=p-h.bet-(h.ins||0)});
   dres=hands.some(h=>h.out==='push')?'y':'';dshown=false;
-  balance+=paid;save();phase='idle';try{myBetAdd(paid)}catch(e){}
+  if(!demo)balance+=paid;save();phase='idle';if(!demo)try{myBetAdd(paid)}catch(e){}
   const keep=hands;render();
   if(balance<=0)say('Out of balance · tap the wallet','lose');
   const b=num(0);if(b>balance)setf(0,balance);paintAll();
@@ -709,9 +826,10 @@ function paintF(i){const v=num(i),h=stackHTML(v);
 function paintAll(){[0,1,2].forEach(paintF);
   const tot=num(0)+(side?num(1)+num(2):0),bad=phase==='idle'&&tot>balance+1e-9;
   [0,1,2].forEach(i=>$('f'+i).classList.toggle('bad',bad&&num(i)>0));
-  $('bets').classList.toggle('nochip',curChip==null);const d=$('bDeal');d.disabled=bad||!(num(0)>0);d.style.display=phase==='idle'?'':'none';
+  $('bets').classList.toggle('nochip',curChip==null);const d=$('bDeal');d.disabled=bad;d.textContent=num(0)>0?'Place Bet':'Place Demo Bet';d.style.display=phase==='idle'?'':'none';
   document.querySelectorAll('#chips .chip').forEach(c=>c.classList.toggle('on',+c.dataset.v===curChip))}
 $('bDeal').onclick=start;
+$('bYes').onclick=()=>{if(phase==='ins')insure(true)};$('bNo').onclick=()=>{if(phase==='ins')insure(false)};
 [0,1,2].forEach(i=>{
   $('i'+i).addEventListener('input',paintAll);
   $('fc'+i).onclick=()=>{if(phase!=='idle'||curChip==null)return;target=i;setf(i,num(i)+curChip);render()};
