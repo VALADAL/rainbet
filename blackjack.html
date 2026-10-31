@@ -793,7 +793,6 @@ function settle(){
   dres=hands.some(h=>h.out==='push')?'y':'';dshown=false;
   if(!demo)balance+=paid;save();phase='idle';if(!demo)try{myBetAdd(paid)}catch(e){}
   const keep=hands;render();
-  if(balance<=0)say('Out of balance · tap the wallet','lose');
   const b=num(0);if(b>balance)setf(0,balance);paintAll();
 }
 /* ui wiring */
