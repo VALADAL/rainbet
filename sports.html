@@ -820,29 +820,29 @@ background:linear-gradient(112deg,transparent 38%,rgba(255,255,255,.5) 49%,rgba(
 .sbnote{margin:2.4cqw 4.6cqw 0;font:500 2.6cqw/1.3 var(--font);color:#7c82ad}
 /* lista */
 .sbl{margin:4.2cqw 4.6cqw 0;display:flex;flex-direction:column;gap:3.3cqw}
-.mc{background:#1d2247;border-radius:2.4cqw;padding:3.3cqw 3.1cqw 3.1cqw;position:relative;cursor:pointer}
-.mc .r1{display:flex;align-items:center;justify-content:space-between;font:600 2.9cqw/1 var(--font);color:#fff;height:3.6cqw}
-.mc .r1 span{display:flex;align-items:center;gap:1.4cqw}
-.mc .r1 svg{width:3.2cqw;height:3.2cqw}
-.mc .st{color:#8f95bd}
-.mc .st.live{color:#3b9cf0}
-.mc .r2{display:flex;align-items:center;justify-content:space-between;margin-top:2.6cqw;height:3.7cqw;font:600 2.9cqw/1 var(--font);color:#8f95bd}
-.mc .r2>span{display:flex;gap:1.5cqw;align-items:center}
-.mc .r2 svg{width:3.6cqw;height:3.6cqw}
+.smc{background:#1d2247;border-radius:2.4cqw;padding:3.3cqw 3.1cqw 3.1cqw;position:relative;cursor:pointer}
+.smc .r1{display:flex;align-items:center;justify-content:space-between;font:600 2.9cqw/1 var(--font);color:#fff;height:3.6cqw}
+.smc .r1 span{display:flex;align-items:center;gap:1.4cqw}
+.smc .r1 svg{width:3.2cqw;height:3.2cqw}
+.smc .st{color:#8f95bd}
+.smc .st.live{color:#3b9cf0}
+.smc .r2{display:flex;align-items:center;justify-content:space-between;margin-top:2.6cqw;height:3.7cqw;font:600 2.9cqw/1 var(--font);color:#8f95bd}
+.smc .r2>span{display:flex;gap:1.5cqw;align-items:center}
+.smc .r2 svg{width:3.6cqw;height:3.6cqw}
 .tm{display:flex;align-items:center;gap:2.2cqw;margin-top:2cqw;height:6cqw}
 .tm .lg{width:4.9cqw;height:4.9cqw;object-fit:contain;flex:none}
 .tm .in{width:4.9cqw;height:4.9cqw;border-radius:50%;background:#2e3568;display:grid;place-items:center;font:700 2.2cqw/1 var(--font);flex:none}
 .tm .nm{flex:1;font:600 3.2cqw/1 var(--font);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tm .sc{width:5.8cqw;height:5cqw;border:1px solid #3a4175;border-radius:1cqw;display:grid;place-items:center;font:600 3cqw/1 var(--font)}
-.mc .mk{text-align:center;font:500 2.8cqw/1 var(--font);color:#8a8da6;margin:3.4cqw 0 0;height:3cqw}
-.mc .ob{margin-top:2cqw;display:flex;gap:1.6cqw}
-.mc .ob button{background:#262c5c;border:1px solid #2d3468;height:7.4cqw}
-.mc .ob .dd{flex:none;width:8cqw;display:grid;place-items:center;background:#262c5c;border:1px solid #2d3468;border-radius:1cqw;height:7.4cqw}
-.mc .ob .dd svg{width:2.4cqw;height:2.4cqw}
-.mc .ob button.on{background:#3b82e4;border-color:#3b82e4}
+.smc .mk{text-align:center;font:500 2.8cqw/1 var(--font);color:#8a8da6;margin:3.4cqw 0 0;height:3cqw}
+.smc .ob{margin-top:2cqw;display:flex;gap:1.6cqw}
+.smc .ob button{background:#262c5c;border:1px solid #2d3468;height:7.4cqw}
+.smc .ob .dd{flex:none;width:8cqw;display:grid;place-items:center;background:#262c5c;border:1px solid #2d3468;border-radius:1cqw;height:7.4cqw}
+.smc .ob .dd svg{width:2.4cqw;height:2.4cqw}
+.smc .ob button.on{background:#3b82e4;border-color:#3b82e4}
 .sbg{margin:4cqw 0 0;display:flex;align-items:center;justify-content:center;gap:5cqw;font:500 3cqw var(--font);color:#8f95bd}
 .sbg button{width:8cqw;height:8cqw;border-radius:50%;background:#171b3a;display:grid;place-items:center}
-.sbg button.on{background:#fff;color:#12162f}
+.sbg button.on{background:#262b55;color:#fff}
 .sbg button svg{width:2.4cqw;height:2.4cqw}
 .sbg button.off{opacity:.35;pointer-events:none}
 .sbe{margin:12cqw 4.6cqw;text-align:center;font:500 3.2cqw/1.4 var(--font);color:#7c82ad}
@@ -1858,10 +1858,13 @@ function parseEvents(sp,path,data){
         odds:oddsOf(c,sp)})}}
   return out}
 const dstr=d=>d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,'0')+String(d.getUTCDate()).padStart(2,'0');
+let __act=0;const __q=[];
+function __slot(){return new Promise(res=>{if(__act<6){__act++;res()}else __q.push(()=>{__act++;res()})})}
+function __free(){__act--;const n=__q.shift();if(n)n()}
 let __best=0;
 async function getJSON(url,ms){
   const tries=[url,'https://corsproxy.io/?url='+encodeURIComponent(url),'https://api.allorigins.win/raw?url='+encodeURIComponent(url)];
-  if(ESPN_PROXY){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||9000);try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(t)}}
+  if(ESPN_PROXY){await __slot();const c=new AbortController(),t=setTimeout(()=>c.abort(),20000);try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(t);__free()}}
   const order=[__best].concat([0,1,2].filter(i=>i!==__best));
   let lastErr;
   for(const i of order){
@@ -1874,9 +1877,16 @@ async function loadSport(k,force){
   const sp=SP[k];if(S.st[k]==='loading')return;if(S.st[k]==='ok'&&!force)return;
   S.st[k]='loading';paint();
   const now=Date.now(),dates=dstr(new Date(now-864e5))+'-'+dstr(new Date(now+6*864e5));
-  const rs=await Promise.allSettled(sp.paths.map(p=>getJSON(ESPN+p+'/scoreboard?dates='+dates+'&limit=300').then(d=>parseEvents(sp,p,d))));
-  let evs=[],ok=0;rs.forEach(r=>{if(r.status==='fulfilled'){ok++;evs=evs.concat(r.value)}});window.__sbRej=k+' '+ok+'/'+rs.length+' ok. '+rs.filter(r=>r.status==='rejected').slice(0,2).map(r=>String((r.reason&&(r.reason.name+' '+r.reason.message))||r.reason)).join(' / ');
+  const one=(p,q)=>getJSON(ESPN+p+'/scoreboard?'+q).then(d=>parseEvents(sp,p,d));
+  const perDay=(p,offs)=>{
+    const days=offs.map(i=>dstr(new Date(now+i*864e5)));
+    return Promise.allSettled(days.map(d=>one(p,'dates='+d))).then(r=>{const f=r.filter(x=>x.status==='fulfilled');if(!f.length)throw r[0].reason;return [].concat(...f.map(x=>x.value))})};
+  /* ESPN rechaza rangos de fechas en varios deportes (400): fútbol va día por día; el resto prueba rango y, si falla, día por día */
+  const get=p=>k==='soccer'?perDay(p,[-1,0,1,2]):one(p,'dates='+dates+'&limit=300').catch(()=>perDay(p,[-1,0,1,2,3]));
+  const rs=await Promise.allSettled(sp.paths.map(get));
+  let evs=[],ok=0;rs.forEach(r=>{if(r.status==='fulfilled'){ok++;evs=evs.concat(r.value)}});(window.__sbRejK=window.__sbRejK||{})[k]=k+' '+ok+'/'+rs.length+' ok. '+rs.filter(r=>r.status==='rejected').slice(0,2).map(r=>String((r.reason&&(r.reason.name+' '+r.reason.message))||r.reason)).join(' / ');
   evs=evs.filter(e=>e.state==='in'||(e.state==='pre'&&e.t>now-36e5));
+  {const seen={};evs=evs.filter(e=>!seen[e.uid]&&(seen[e.uid]=1))}
   if(!ok){if(k==='soccer'){S.data[k]=fallbackEvents();S.demo=true;S.st[k]='ok'}else{S.data[k]=[];S.st[k]='fail'}}
   else{if(k==='soccer')S.demo=false;S.data[k]=evs;S.st[k]='ok';LSS('sb_c_'+k,{t:now,evs:evs})}
   (S.data[k]||[]).forEach(e=>{evMap[e.uid]=e});
@@ -1936,7 +1946,7 @@ function cardFeatured(ev){
 function cardList(ev){
   const live=ev.state==='in',fv=S.fav[ev.uid];
   const st=live?`<span class="st live">${esc(ev.clock||'Live')}</span>`:`<span class="st">${tfmt(ev.t)}</span>`;
-  return`<div class="mc" data-m="${esc(ev.uid)}">
+  return`<div class="smc" data-m="${esc(ev.uid)}">
    <div class="r1"><span>${SPI[ev.sport]||IC.ball}${esc(ev.country)}${ev.country?' <i style="opacity:.5;font-style:normal">▸</i> ':''}${esc(ev.league)}</span><span data-f="${esc(ev.uid)}" style="color:${fv?'#f3b63f':'#7d83ad'}">${fv?IC.starF:IC.star}</span></div>
    <div class="r2"><span>${st}${live?IC.play:''}${IC.shirt}${IC.stats}</span>${live?IC.sigL.replace('<svg','<svg style="width:4cqw;height:4cqw"'):''}</div>
    <div class="tm">${logoHTML(ev.home,'lg')}<span class="nm">${esc(ev.home.name)}</span>${live?`<span class="sc">${ev.home.score}</span>`:''}</div>
@@ -2031,8 +2041,8 @@ function paintHome(){
   $s('sbf').innerHTML=feat.map(cardFeatured).join('');$s('sbf').style.display=feat.length?'':'none';
   $s('sbc').innerHTML=SPORTS.map(s=>`<button data-sp="${s.k}" class="${S.sport===s.k?'on':''}"><span class="tl">${SPI[s.k]}</span><span class="lb">${s.n}</span></button>`).join('');
   const st=S.st[S.sport];
-  $s('sbnote').textContent=S.demo&&S.sport==='soccer'?'Sin conexión con ESPN ('+(window.__sbRej||'sin detalle')+'): mostrando partidos de ejemplo.':st==='loading'?'Cargando partidos…':'';
-  $s('sbl').innerHTML=L.length?L.slice(pg*PS,pg*PS+PS).map(cardList).join(''):`<div class="sbe">${st==='loading'?'Cargando…':st==='fail'?'No se pudieron cargar partidos de este deporte.':'No hay partidos ahora.'}</div>`;
+  $s('sbnote').textContent=S.demo&&S.sport==='soccer'?'Sin conexión con ESPN ('+((window.__sbRejK&&window.__sbRejK.soccer)||'cargando')+'): mostrando partidos de ejemplo.':st==='loading'?'Cargando partidos…':'';
+  $s('sbl').innerHTML=L.length?L.slice(pg*PS,pg*PS+PS).map(cardList).join(''):`<div class="sbe">${st==='loading'?'Cargando…':st==='fail'?'No se pudieron cargar partidos de este deporte.':'No hay partidos de '+SP[S.sport].n+' ahora (ESPN no devuelve juegos; puede ser fuera de temporada).'}</div>`;
   const pages=Math.ceil(L.length/PS);
   $s('sbg').innerHTML=L.length>PS?`<button data-pg="-1" class="${pg?'':'off'}">${IC.caretL}</button><span>${pg*PS+1} - ${Math.min(L.length,pg*PS+PS)} of ${L.length}</span><button class="on" data-pg="1"${pg>=pages-1?' style="opacity:.35;pointer-events:none"':''}>${IC.caretR}</button>`:'';
   document.querySelectorAll('#sbp button').forEach(b=>b.classList.toggle('on',b.dataset.p===S.pill));
