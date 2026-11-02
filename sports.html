@@ -1857,7 +1857,17 @@ function parseEvents(sp,path,data){
         odds:oddsOf(c,sp)})}}
   return out}
 const dstr=d=>d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,'0')+String(d.getUTCDate()).padStart(2,'0');
-async function getJSON(url,ms){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||9000);try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error(r.status);return await r.json()}finally{clearTimeout(t)}}
+let __best=0;
+async function getJSON(url,ms){
+  const tries=[url,'https://corsproxy.io/?url='+encodeURIComponent(url),'https://api.allorigins.win/raw?url='+encodeURIComponent(url)];
+  const order=[__best].concat([0,1,2].filter(i=>i!==__best));
+  let lastErr;
+  for(const i of order){
+    const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||9000);
+    try{const r=await fetch(tries[i],{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();__best=i;window.__sbErr='';return j}
+    catch(e){lastErr=e;window.__sbErr=((e&&e.name)||'Error')+': '+((e&&e.message)||'')+' ['+['directo','corsproxy','allorigins'][i]+']'}
+    finally{clearTimeout(t)}}
+  throw lastErr}
 async function loadSport(k,force){
   const sp=SP[k];if(S.st[k]==='loading')return;if(S.st[k]==='ok'&&!force)return;
   S.st[k]='loading';paint();
@@ -2019,7 +2029,7 @@ function paintHome(){
   $s('sbf').innerHTML=feat.map(cardFeatured).join('');$s('sbf').style.display=feat.length?'':'none';
   $s('sbc').innerHTML=SPORTS.map(s=>`<button data-sp="${s.k}" class="${S.sport===s.k?'on':''}"><span class="tl">${SPI[s.k]}</span><span class="lb">${s.n}</span></button>`).join('');
   const st=S.st[S.sport];
-  $s('sbnote').textContent=S.demo&&S.sport==='soccer'?'Sin conexión con ESPN: mostrando partidos de ejemplo.':st==='loading'?'Cargando partidos…':'';
+  $s('sbnote').textContent=S.demo&&S.sport==='soccer'?'Sin conexión con ESPN ('+(window.__sbErr||'sin detalle')+'): mostrando partidos de ejemplo.':st==='loading'?'Cargando partidos…':'';
   $s('sbl').innerHTML=L.length?L.slice(pg*PS,pg*PS+PS).map(cardList).join(''):`<div class="sbe">${st==='loading'?'Cargando…':st==='fail'?'No se pudieron cargar partidos de este deporte.':'No hay partidos ahora.'}</div>`;
   const pages=Math.ceil(L.length/PS);
   $s('sbg').innerHTML=L.length>PS?`<button data-pg="-1" class="${pg?'':'off'}">${IC.caretL}</button><span>${pg*PS+1} - ${Math.min(L.length,pg*PS+PS)} of ${L.length}</span><button class="on" data-pg="1"${pg>=pages-1?' style="opacity:.35;pointer-events:none"':''}>${IC.caretR}</button>`:'';
