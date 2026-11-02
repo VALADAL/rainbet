@@ -1756,7 +1756,8 @@ let fmtMode=LSK('sb_fmt','american');
 const showOdd=d=>{if(!(d>1))return '-';if(fmtMode==='decimal')return d.toFixed(2);const a=toAm(d);return(a>0?'+':'')+a};
 const money=n=>(typeof SYMB==='function'?SYMB():'$')+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const r2=n=>Math.round(n*100)/100;
-const ESPN='https://site.api.espn.com/apis/site/v2/sports/';
+const ESPN_PROXY='https://ancient-leaf-61f3.valadal-enterprises.workers.dev';/* <-- pega aquí la URL de tu Worker, ej: 'https://espn.tuusuario.workers.dev' */
+const ESPN=(ESPN_PROXY?ESPN_PROXY.replace(/\/+$/,''):'https://site.api.espn.com')+'/apis/site/v2/sports/';
 const SOC={'usa.1':['USA','MLS'],'eng.1':['England','Premier League'],'esp.1':['Spain','LaLiga'],'ita.1':['Italy','Serie A'],'ger.1':['Germany','Bundesliga'],'fra.1':['France','Ligue 1'],'mex.1':['Mexico','Liga MX'],'arg.1':['Argentina','Liga Profesional'],'bra.1':['Brazil','Brasileiro Serie A'],'por.1':['Portugal','Primeira Liga'],'ned.1':['Netherlands','Eredivisie'],'uefa.champions':['Europe','Champions League'],'uefa.europa':['Europe','Europa League'],'conmebol.libertadores':['South America','Copa Libertadores']};
 const SPORTS=[
  {k:'soccer',n:'Soccer',draw:true,paths:Object.keys(SOC).map(x=>'soccer/'+x)},
@@ -1864,8 +1865,8 @@ async function getJSON(url,ms){
   let lastErr;
   for(const i of order){
     const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||9000);
-    try{const r=await fetch(tries[i],{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();__best=i;window.__sbErr='';return j}
-    catch(e){lastErr=e;window.__sbErr=((e&&e.name)||'Error')+': '+((e&&e.message)||'')+' ['+['directo','corsproxy','allorigins'][i]+']'}
+    try{const r=await fetch(tries[i],{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();__best=i;window.__sbErr='';window.__sbE={};return j}
+    catch(e){lastErr=e;window.__sbE=window.__sbE||{};window.__sbE[i]=['directo','corsproxy','allorigins'][i]+': '+((e&&e.name)||'Error')+' '+((e&&e.message)||'');window.__sbErr=Object.keys(window.__sbE).sort().map(k=>window.__sbE[k]).join(' | ')}
     finally{clearTimeout(t)}}
   throw lastErr}
 async function loadSport(k,force){
