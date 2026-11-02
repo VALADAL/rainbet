@@ -1861,6 +1861,7 @@ const dstr=d=>d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,'0')+Strin
 let __best=0;
 async function getJSON(url,ms){
   const tries=[url,'https://corsproxy.io/?url='+encodeURIComponent(url),'https://api.allorigins.win/raw?url='+encodeURIComponent(url)];
+  if(ESPN_PROXY){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||9000);try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(t)}}
   const order=[__best].concat([0,1,2].filter(i=>i!==__best));
   let lastErr;
   for(const i of order){
@@ -1874,7 +1875,7 @@ async function loadSport(k,force){
   S.st[k]='loading';paint();
   const now=Date.now(),dates=dstr(new Date(now-864e5))+'-'+dstr(new Date(now+6*864e5));
   const rs=await Promise.allSettled(sp.paths.map(p=>getJSON(ESPN+p+'/scoreboard?dates='+dates+'&limit=300').then(d=>parseEvents(sp,p,d))));
-  let evs=[],ok=0;rs.forEach(r=>{if(r.status==='fulfilled'){ok++;evs=evs.concat(r.value)}});
+  let evs=[],ok=0;rs.forEach(r=>{if(r.status==='fulfilled'){ok++;evs=evs.concat(r.value)}});window.__sbRej=k+' '+ok+'/'+rs.length+' ok. '+rs.filter(r=>r.status==='rejected').slice(0,2).map(r=>String((r.reason&&(r.reason.name+' '+r.reason.message))||r.reason)).join(' / ');
   evs=evs.filter(e=>e.state==='in'||(e.state==='pre'&&e.t>now-36e5));
   if(!ok){if(k==='soccer'){S.data[k]=fallbackEvents();S.demo=true;S.st[k]='ok'}else{S.data[k]=[];S.st[k]='fail'}}
   else{if(k==='soccer')S.demo=false;S.data[k]=evs;S.st[k]='ok';LSS('sb_c_'+k,{t:now,evs:evs})}
@@ -2030,7 +2031,7 @@ function paintHome(){
   $s('sbf').innerHTML=feat.map(cardFeatured).join('');$s('sbf').style.display=feat.length?'':'none';
   $s('sbc').innerHTML=SPORTS.map(s=>`<button data-sp="${s.k}" class="${S.sport===s.k?'on':''}"><span class="tl">${SPI[s.k]}</span><span class="lb">${s.n}</span></button>`).join('');
   const st=S.st[S.sport];
-  $s('sbnote').textContent=S.demo&&S.sport==='soccer'?'Sin conexión con ESPN ('+(window.__sbErr||'sin detalle')+'): mostrando partidos de ejemplo.':st==='loading'?'Cargando partidos…':'';
+  $s('sbnote').textContent=S.demo&&S.sport==='soccer'?'Sin conexión con ESPN ('+(window.__sbRej||'sin detalle')+'): mostrando partidos de ejemplo.':st==='loading'?'Cargando partidos…':'';
   $s('sbl').innerHTML=L.length?L.slice(pg*PS,pg*PS+PS).map(cardList).join(''):`<div class="sbe">${st==='loading'?'Cargando…':st==='fail'?'No se pudieron cargar partidos de este deporte.':'No hay partidos ahora.'}</div>`;
   const pages=Math.ceil(L.length/PS);
   $s('sbg').innerHTML=L.length>PS?`<button data-pg="-1" class="${pg?'':'off'}">${IC.caretL}</button><span>${pg*PS+1} - ${Math.min(L.length,pg*PS+PS)} of ${L.length}</span><button class="on" data-pg="1"${pg>=pages-1?' style="opacity:.35;pointer-events:none"':''}>${IC.caretR}</button>`:'';
