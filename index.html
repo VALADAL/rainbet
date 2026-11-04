@@ -1364,5 +1364,27 @@ var path=location.pathname.split('/').pop()||'index.html',home=(path==='index.ht
 var sb=document.querySelector('#lobby .sb');if(sb){sb.style.cursor='pointer';sb.addEventListener('click',openS)}
 })();
 </script>
+<style id="navFlush">
+/* barra inferior pegada al borde de la pantalla, como en el original (sin relleno extra de safe-area) */
+html,body{background:#14192f!important}
+.nav{height:57.67px!important}
+html.gap #app{bottom:auto!important;height:var(--sh,100%)!important}
+</style>
+<script id="navFlushJs">
+(function(){
+ var de=document.documentElement;
+ var standalone=function(){return navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)};
+ function fit(){
+  var sh=Math.max(screen.height,screen.width),h=innerHeight;
+  var gap=standalone()&&matchMedia('(orientation: portrait)').matches&&sh-h>4&&sh-h<140;
+  de.classList.toggle('gap',gap);
+  if(gap)de.style.setProperty('--sh',sh+'px');
+ }
+ function again(){fit();setTimeout(fit,150);setTimeout(fit,600)}
+ addEventListener('load',again);addEventListener('pageshow',again);addEventListener('resize',again);addEventListener('orientationchange',again);
+ document.addEventListener('visibilitychange',function(){if(!document.hidden)again()});
+ again();
+})();
+</script>
 </body>
 </html>
