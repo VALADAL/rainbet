@@ -862,7 +862,7 @@ const r2=n=>Math.round(n*100)/100;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const money=n=>(n<0?'-':'')+'$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 /* ---- compat con los scripts del menu / recompensas / wallet (usan estos nombres) ---- */
-let balance=0;
+let balance=0;try{var _b0=parseFloat(localStorage.getItem('bj_bal'));balance=isFinite(_b0)?_b0:1000}catch(e){balance=1000}
 function save(){try{localStorage.setItem('bj_bal',balance)}catch(e){}try{window.RBSTATS&&RBSTATS.snap()}catch(e){}}window.rbSaveBal=save;
 let side=false;const num=()=>0;let hands=[{bet:0,ins:0}];let phase='idle';
 function render(){$('bal').textContent='$'+balance.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
