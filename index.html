@@ -1368,7 +1368,10 @@ var sb=document.querySelector('#lobby .sb');if(sb){sb.style.cursor='pointer';sb.
 <style id="navFlush">
 /* barra inferior pegada al borde de la pantalla, como en el original (sin relleno extra de safe-area) */
 html,body{background:#14192f!important}
-.nav{height:57.67px!important}
+/* --navx = espacio extra bajo los iconos (sube iconos y texto respecto al borde; ajusta este numero a tu gusto) */
+:root{--navx:14px}
+.nav{height:calc(57.67px + var(--navx))!important}
+.nav .on::after,.nav.mn-open>div:first-child::after{bottom:calc(var(--navx) + .67px)!important}
 </style>
 <script id="navFlushJs">
 (function(){
@@ -1384,23 +1387,6 @@ html,body{background:#14192f!important}
  addEventListener('load',again);addEventListener('pageshow',again);addEventListener('resize',again);addEventListener('orientationchange',again);
  document.addEventListener('visibilitychange',function(){if(!document.hidden)again()});
  again();
-})();
-</script>
-<script id="dbgBox">
-(function(){
- function mk(){
-  var p=document.createElement('div');p.style.cssText='position:fixed;left:0;right:0;top:0;height:0;padding-bottom:env(safe-area-inset-bottom,0px);visibility:hidden';document.body.appendChild(p);
-  var q=document.createElement('div');q.style.cssText='position:fixed;left:0;right:0;top:0;height:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden';document.body.appendChild(q);
-  var d=document.createElement('div');
-  d.style.cssText='position:fixed;left:8px;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:99999;background:#000c;color:#0f0;font:11px/1.35 monospace;padding:6px 8px;border-radius:6px;white-space:pre';
-  function upd(){
-   var vv=window.visualViewport;
-   d.textContent='standalone: '+navigator.standalone+'\ninnerH: '+innerHeight+'  screenH: '+screen.height+'\nvisualVP H: '+(vv?Math.round(vv.height):'-')+'\nsafe top/bottom: '+q.offsetHeight+' / '+p.offsetHeight+'\nUA: '+(/CriOS/.test(navigator.userAgent)?'Chrome':/FxiOS/.test(navigator.userAgent)?'Firefox':/Safari/.test(navigator.userAgent)?'Safari':'otro')+'\n(toca para cerrar)';
-  }
-  d.onclick=function(){d.remove()};
-  document.body.appendChild(d);upd();setInterval(upd,1000);
- }
- if(document.body)mk();else addEventListener('DOMContentLoaded',mk);
 })();
 </script>
 </body>
