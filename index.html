@@ -724,7 +724,7 @@ addEventListener('message',e=>{
   if(e.source!==fr.contentWindow||!e.data||!e.data.ratbet)return;
   if(e.data.ratbet==='close')return closeW();
   if(e.data.ratbet==='credit'){const a=+e.data.amount;
-    if(isFinite(a)&&a>0&&a<=1e9){balance=Math.round((balance+a*(window.RBCUR?RBCUR.rate():1))*100)/100;save();render();try{RBSTATS.tx('deposit',a*(window.RBCUR?RBCUR.rate():1),'Code Redeemed')}catch(e){}}}
+    if(isFinite(a)&&a>0&&a<=1e9){balance=Math.round((balance+a*(window.RBCUR?RBCUR.rate():1))*100)/100;save();render();try{RBSTATS.tx('deposit',a*(window.RBCUR?RBCUR.rate():1),e.data.src==='redeem'?'Code Redeemed':'Crypto Deposit')}catch(e){}}}
 });
 })();
 </script>

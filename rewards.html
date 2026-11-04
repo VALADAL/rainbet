@@ -1397,6 +1397,32 @@ m.addEventListener('click',function(e){var it=e.target.closest('.pfi');if(!it)re
  location.href=g||'error.html'});
 })();
 </script>
+<script id="rbRanks">
+(function(){
+if(window.RBRANKS)return;
+var G=[
+ {k:'bronze',n:'Bronze',c:'#e0a784',t:[5000,15000,30000,50000]},
+ {k:'silver',n:'Silver',c:'#c9cadb',t:[75000,105000,145000,195000]},
+ {k:'gold',n:'Gold',c:'#f0c14b',t:[260000,420000,750000,1300000]},
+ {k:'platinum',n:'Platinum',c:'#e6e6f2',t:[2000000,3000000,4500000,6500000]},
+ {k:'diamond',n:'Diamond',c:'#5fd0f5',t:[9000000,12000000,16000000,21000000]},
+ {k:'infernal',n:'Infernal',c:'#ff7b7b',t:[28000000,36000000,46000000,58000000]},
+ {k:'infernald',n:'Infernal Diamond',c:'#ff9a4d',t:[75000000]}];
+var RN=['I','II','III','IV'],T=[];
+G.forEach(function(g,gi){g.t.forEach(function(v,i){T.push({g:gi,i:i,at:v,name:g.t.length>1?g.n+' '+RN[i]:g.n})})});
+var P={none:['#3d4163','#2a2d4a','#4a4e70'],bronze:['#e9a77f','#6b4330','#f3c4a4'],silver:['#d4d2de','#7b7884','#ececf4'],gold:['#f0c14b','#c28a22','#ffe29a'],platinum:['#e4e4f0','#8a2f3d','#ff8a96'],diamond:['#7fdcff','#2f8fd0','#d6f3ff'],infernal:['#ff8d8d','#d03b45','#ffd2d2'],infernald:['#ffa35c','#d4402a','#ffe0b8']};
+var X={none:0,bronze:0,silver:0,gold:0,platinum:1,diamond:1,infernal:2,infernald:2};
+function icon(k,sz){var p=P[k],x=X[k],s='<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 64 64" style="display:block">';
+ if(x==2)s+='<polygon points="32,0 38,10 49,5 50,17 62,18 55,28 64,32 55,36 62,46 50,47 49,59 38,54 32,64 26,54 15,59 14,47 2,46 9,36 0,32 9,28 2,18 14,17 15,5 26,10" fill="'+p[0]+'" opacity=".85"/>';
+ if(x==1)s+='<polygon points="8,4 25,17 21,30 3,21" fill="'+p[0]+'"/><polygon points="56,4 39,17 43,30 61,21" fill="'+p[0]+'"/>';
+ return s+'<polygon points="32,6 58,32 32,58 6,32" fill="'+p[0]+'"/><polygon points="32,13 51,32 32,51 13,32" fill="'+p[1]+'"/><polygon points="32,25 39,32 32,39 25,32" fill="'+p[2]+'"/></svg>'}
+function cf(u){var v=u*RBCUR.rate(),sy=RBCUR.sym().trim();
+ function f(n,s){return (Math.round(n*10)/10).toString().replace(/\.0$/,'')+s}
+ var r=v>=1e9?f(v/1e9,'B'):v>=1e6?f(v/1e6,'M'):v>=1e3?f(v/1e3,'K'):f(v,'');
+ return sy+(/[A-Za-z]$/.test(sy)?' ':'')+r}
+window.RBRANKS={groups:G,tiers:T,icon:icon,cf:cf,of:function(wag){var x=-1;for(var i=0;i<T.length;i++)if(wag>=T[i].at)x=i;return x}};
+})();
+</script>
 <script id="rwJs">
 (function(){
 var pg=document.querySelector('.pg');if(!pg||!window.rbRw)return;
@@ -1410,6 +1436,31 @@ var E={pend:at(298.52,32.65),yd:at(149.84,119.03),
  rw:at(41,1004.65),rg:at(89.25,1004.65),rwd:at(161.42,1004.65),rp:at(372.67,1004.65),
  tot:at(198.41,1468.65),d:at(77.82,1546.98),rb:at(239.02,1625.65),ob:at(239.02,1703.98)};
 var rkB=bx(365,389.7),dB=bx(462,388.7);
+function im(l,t){var a='left:calc('+l.toFixed(2)+'*var(--k));top:calc('+t.toFixed(2)+'*var(--k))';
+ return [].find.call(pg.querySelectorAll('img.a'),function(e){return (e.getAttribute('style')||'').indexOf(a)>=0})}
+function swap(img){if(!img)return null;var d=document.createElement('div');d.className='a';d.style.cssText=img.getAttribute('style');img.style.display='none';img.parentNode.insertBefore(d,img);return {d:d,i:img}}
+var RI={pl:at(73,1047.84),pr:at(410.7,1047.84),l:swap(im(40,1042)),r:swap(im(376,1040)),
+ ti:[im(86,1179),im(232,1179),im(381,1179)].map(swap),tl:[im(102,1228),im(247.7,1228),im(397.3,1228)],ll:[im(174,1153),im(321,1153)],
+ tn:[at(81.58,1157.17),at(225.03,1157.17),at(372.62,1157.17)]};
+(function(){var tr=document.createElement('div');tr.className='a';tr.style.cssText='left:calc(41*var(--k));top:calc(1026*var(--k));width:calc(435.7*var(--k));height:calc(6*var(--k));border-radius:calc(3*var(--k));background:#262c52;overflow:hidden';
+ tr.innerHTML='<div id="rkFill" style="height:100%;width:0;border-radius:inherit;background:#dd8d61;transition:width .4s"></div>';pg.appendChild(tr)})();
+function rankUI(w,x){
+ var RK=window.RBRANKS;if(!RK||!RI.pl||!RI.pr||!RI.l||!RI.r)return;
+ var T=RK.tiers,G=RK.groups,cu=x>=0?T[x]:null,nx=T[x+1]||null,cg=cu?G[cu.g]:null,ng=nx?G[nx.g]:(cg||G[0]);
+ RI.pl.textContent=cu?cu.name.toUpperCase():'UNRANKED';RI.pl.style.color=cg?cg.c:'#8f9ebf';
+ RI.pr.textContent=nx?nx.name.toUpperCase():'MAX RANK';RI.pr.style.color=ng.c;
+ RI.l.d.innerHTML=RK.icon(cg?cg.k:'none','100%');RI.r.d.innerHTML=RK.icon(ng.k,'100%');
+ var kp=RI.r.d.offsetWidth/29||1,pr=RI.pr;
+ pr.style.left=(470*kp-pr.offsetWidth)+'px';RI.r.d.style.left=(pr.offsetLeft-34.7*kp)+'px';
+ var from=cu?cu.at:0,p=nx?Math.max(0,Math.min(1,(w-from)/(nx.at-from))):1,f=document.getElementById('rkFill');
+ if(f){f.style.width=(p>0?Math.max(p*100,2):0)+'%';f.style.background=ng.c}
+ var st=Math.max(0,Math.min(x+1,T.length-3));
+ for(var i=0;i<3;i++){var t=T[st+i],g=G[t.g],ok=w>=t.at,n=RI.tn[i];
+  if(n){n.textContent=t.name.length>12?'Inf. Diamond':t.name;n.style.color=g.c}
+  if(RI.ti[i]){RI.ti[i].d.innerHTML=RK.icon(g.k,'100%');RI.ti[i].d.style.opacity=ok?1:.8}
+  if(RI.tl[i])RI.tl[i].style.display=ok?'none':'';
+  if(RI.ll[i]){RI.ll[i].style.display=ok?'none':'';if(n)RI.ll[i].style.left=(n.offsetLeft+n.offsetWidth+6*kp)+'px'}}
+}
 var F=function(n){return RBCUR.fmt(n)},FU=function(u){return RBSTATS.fmt(u)};
 function set(b,t,on){if(!b)return;b.classList.toggle('dis',!on);b.style.background=on?'#3bbf57':'#317854';t&&(t.style.color=on?'#ffffff':'#9398a8')}
 function combo(a,s,b,txt){if(!a)return;a.textContent=txt;a.style.color='#fff';a.style.fontSize=txt.length>16?'9px':'';if(s)s.style.display='none';if(b)b.style.display='none'}
@@ -1423,10 +1474,11 @@ function paint(){
  combo(E.tw,E.ts,E.tg,F(s.wag)+' / '+F(s.GOAL));
  set(dB,E.dTxt,ready);
  var rk=s.rb>=0.01;set(rkB,E.rkTxt,rk);E.rkLbl&&(E.rkLbl.textContent=rk?F(s.rb):'No Funds');
- var w=RBSTATS.get().wagered,goal=4000;
+ var w=RBSTATS.get().wagered,rx=RBRANKS.of(w),goal=RBRANKS.tiers[Math.min(rx+1,RBRANKS.tiers.length-1)].at;
  if(E.rw&&E.rg&&E.rwd){E.rw.textContent=FU(w)+'/';E.rg.textContent=FU(goal);
   var x=E.rw.offsetLeft+E.rw.offsetWidth+6;E.rg.style.left=x+'px';E.rwd.style.left=(x+E.rg.offsetWidth+6)+'px'}
  E.rp&&(E.rp.textContent=Math.min(100,Math.floor(w/goal*100))+'% Completed');
+ rankUI(w,rx);
  var L=RBSTATS.life(),r=(L.reload||0),k=(L.rakeback||0),o=(L.deposit||0);
  E.d&&(E.d.textContent=FU(r));E.rb&&(E.rb.textContent=FU(k));E.ob&&(E.ob.textContent=FU(o));E.tot&&(E.tot.textContent=FU(r+k+o));
 }
