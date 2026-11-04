@@ -2695,7 +2695,7 @@ async function fetchResult(leg){
 setInterval(()=>{if(S.view!=='bets')return;document.querySelectorAll('[data-co]').forEach(el=>{const b=S.bets.find(x=>x.id===el.dataset.co);const c=el.querySelector('.cov');if(b&&c&&b.status==='pending')c.textContent='CASH OUT '+coVal(b).toFixed(2)+' '+symb()})},5000);
 let __stT=0;function settleSoon(){if(Date.now()-__stT>45000){__stT=Date.now();settleAll()}}
 async function settleAll(){
-  const pend=S.bets.filter(b=>b.status==='pending');if(!pend.length)return;
+  const pend=S.bets.filter(b=>b.status==='pending'||(b.status==='lost'&&b.legs.some(l=>!l.res)));if(!pend.length)return;
   for(const k in resCache)delete resCache[k];
   let changed=false;
   for(const b of pend){
@@ -2703,6 +2703,7 @@ async function settleAll(){
       if(l.res||Date.now()<l.time+(l.key.indexOf('out|')===0?4*864e5:90*60000))continue;
       const r=await fetchResult(l);if(!r)continue;
       if(r.out){l.res=r.win&&r.win===l.pick?'W':'L';l.score=''}else{l.res=catFor(l.key,r.h,r.a);l.score=r.h+':'+r.a}changed=true}
+    if(b.status!=='pending')continue; /* combo ya perdido: solo se siguen actualizando sus patas */
     const dead=b.legs.some(l=>l.res==='L');
     if(dead||b.legs.every(l=>l.res)){
       let mult=1;if(dead)mult=0;else b.legs.forEach(l=>{mult*=MULT[l.res](l.dec)});
@@ -2924,7 +2925,7 @@ function betCard(b){
   else{const ex=S.bx[b.id]!==false;
     body=`<div class="mbx${ex?'':' c'}" data-bx="${esc(b.id)}">${b.legs.some(isEp)?'<span class="bgs"><span class="ebg">Early Payout</span></span>':''}<span class="mcn">${b.legs.length}</span><i class="cr"></i></div>`;
     if(ex)body+=b.legs.map(l=>{const lk=l.res?lKey(l.res):'',ev1=evMap[l.uid],lv=!!ev1&&ev1.state==='in'&&!l.res;if(lv)l.live=1;
-      return`<div class="mbl">${epb(l)}<div class="lt">${l.res?'<span class="en">Ended</span>':lv?`<span class="en">${esc(ev1.clock)}</span>`:`<span>${relDay(l.time)}</span>`}<span class="rt">${(lv||l.live)?`<span class="lv">${IC.sigL}</span>`:''}${lk?`<span class="st ${lk}">${lLab[lk]}</span>`:''}</span></div>${leagueH(l)}${teamsH(l,true)}<div class="mp">${pickH(l)}</div></div>`}).join('')}
+      return`<div class="mbl">${epb(l)}<div class="lt">${l.res?'<span class="en">Ended</span>':lv?`<span class="en">${esc(ev1.clock)}</span>`:`<span>${relDay(l.time)}</span>`}<span class="rt">${(lv||(l.live&&!l.res))?`<span class="lv">${IC.sigL}</span>`:''}${lk?`<span class="st ${lk}">${lLab[lk]}</span>`:''}</span></div>${leagueH(l)}${teamsH(l,true)}<div class="mp">${pickH(l)}</div></div>`}).join('')}
   const logo=typeof SRC!=='undefined'&&SRC?`<img alt="Rainbet" src="${SRC}">`:'<b>Rainbet</b>';
   const tk=tkOf(b);
   let rows=(!combo?`<div class="mbr pk"><span>${pickH(b.legs[0])}</span></div>`:'')+`<div class="mbr"><span>Total Odds</span><span>${dec2(fin)}</span></div><div class="mbr"><span>Stake</span><span>${b.stake.toFixed(2)} ${sy}</span></div>`;
