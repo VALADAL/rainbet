@@ -1909,6 +1909,13 @@ function applyLive(oc,nc,f){
 .mp .sc{margin-left:9px}
 .mn .od{margin-right:9px;font-weight:600}
 .mbl .mp{margin-top:9px;font:600 12.5px/16px var(--font);color:#868ca4}
+.ebg{display:inline-block;background:#2f6fe0;color:#fff;font:700 10px/1 var(--font);padding:4px 7px;border-radius:4px;letter-spacing:.02em;text-transform:uppercase}
+.bgr{margin:0 0 8px}
+.mbx .bgs{margin-right:auto;padding-left:10px;display:flex;gap:6px}
+.mbo{display:flex;gap:8px;margin:14px 8px 0}
+.mbo .co{flex:1;height:44px;border-radius:9px;background:#2f6fe0;color:#fff;font:600 14px/1 var(--font);letter-spacing:.02em}
+.mbo .sh{width:56px;height:44px;border-radius:9px;background:#252a48;display:grid;place-items:center}
+.mbo .sh svg{width:20px;height:20px}
 .mbx{margin:12px 0 0;height:36px;border-radius:8px;background:#252a48;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:0 17px 0 0;cursor:pointer}
 .mbx .mcn{width:26px;height:26px;border-radius:50%;background:#343b60;font:600 12px/26px var(--font);text-align:center;color:#fff}
 .mbx .cr{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:6px solid #fff;margin-right:6px}
@@ -2532,6 +2539,7 @@ async function fetchResult(leg){
   const e=list.find(x=>x.id===leg.evId);if(!e||!e.done)return null;
   if(e.out)return{win:e.winner||'',out:1};
   return{h:e.home.score,a:e.away.score}}
+setInterval(()=>{if(S.view!=='bets')return;document.querySelectorAll('[data-co]').forEach(el=>{const b=S.bets.find(x=>x.id===el.dataset.co);const c=el.querySelector('.cov');if(b&&c&&b.status==='pending')c.textContent='CASH OUT '+coVal(b).toFixed(2)+' '+symb()})},5000);
 let __stT=0;function settleSoon(){if(Date.now()-__stT>45000){__stT=Date.now();settleAll()}}
 async function settleAll(){
   const pend=S.bets.filter(b=>b.status==='pending');if(!pend.length)return;
@@ -2542,8 +2550,9 @@ async function settleAll(){
       if(l.res||Date.now()<l.time+(l.key.indexOf('out|')===0?4*864e5:90*60000))continue;
       const r=await fetchResult(l);if(!r)continue;
       if(r.out){l.res=r.win&&r.win===l.pick?'W':'L';l.score=''}else{l.res=catFor(l.key,r.h,r.a);l.score=r.h+':'+r.a}changed=true}
-    if(b.legs.every(l=>l.res)){
-      let mult=1;b.legs.forEach(l=>{mult*=MULT[l.res](l.dec)});
+    const dead=b.legs.some(l=>l.res==='L');
+    if(dead||b.legs.every(l=>l.res)){
+      let mult=1;if(dead)mult=0;else b.legs.forEach(l=>{mult*=MULT[l.res](l.dec)});
       if(b.legs.every(l=>l.res==='W'))mult*=(b.boost||1);
       b.paid=r2(b.stake*mult);
       b.status=b.paid<=0?'lost':b.paid>b.stake+1e-9?'won':'void';
@@ -2730,23 +2739,41 @@ const BCOPY='<svg viewBox="0 0 14 14" fill="none" stroke="#9096b0" stroke-width=
 function leagueH(l){const ic=(SPI[l.sport]||IC.ball);return`<div class="ml">${ic}<span>${l.cn?esc(l.cn)+' <i>▶</i> ':''}${esc(l.lg||'')}</span></div>`}
 function teamsH(l,od){return`<div class="mn">${od?`<b class="od">${dec2(l.dec)}</b>`:''}<span>${esc(l.home)}</span><i>vs</i><span>${esc(l.away)}</span></div>`}
 function pickH(l){return`${esc(l.market)} ${esc(l.pick)}${l.score?`<span class="sc">${esc(l.score)}</span>`:''}`}
+const isEp=l=>l.key.indexOf('ep|')===0;
+const epb=l=>isEp(l)?'<div class="bgr"><span class="ebg">Early Payout</span></div>':'';
+function coVal(b){
+  let P=1;
+  for(const l of b.legs){
+    if(l.res){P*=(l.res==='W'||l.res==='HW'?1:l.res==='P'?1/l.dec:0);continue}
+    const ev=evMap[l.uid];let q=Math.min(.97,1/l.dec);
+    if(ev&&ev.state==='in'){
+      const pk=l.key.split('|'),m=ev.clock==='Halftime'?45:(parseInt(ev.clock)||45),f=Math.min(1,m/90);
+      if(pk[0]==='ep'||pk[0]==='1x2'){
+        const hs=ev.home.score,as=ev.away.score,lead=pk[1]==='1'?hs-as:pk[1]==='2'?as-hs:(hs===as?1:-1);
+        if(lead>0)q=Math.min(.97,q+(1-q)*(.25+.6*f)+(pk[1]==='X'?0:.06*(lead-1)));
+        else if(lead<0)q=Math.max(.02,q*(1-.8*f))}}
+    P*=q}
+  const fin=b.dec*(b.boost||1);
+  return Math.max(.01,r2(b.stake*fin*P*.96))}
+const BSHARE='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18c0-5 3-8.5 9-8.5h6"/><path d="M15.5 5l4 4.5-4 4.5"/></svg>';
 function betCard(b){
   const k=bKey(b),fin=b.dec*(b.boost||1),combo=b.legs.length>1,sy=symb(),open=b.status==='pending';
   let body='';
   if(!combo){const l=b.legs[0];
     const ev0=evMap[l.uid],lv0=!!ev0&&ev0.state==='in'&&!l.res;
-    body=`<div class="mbm"><div class="mt">${lv0?`<span class="en">${esc(ev0.clock)}</span>`:`<span>${relDay(l.time)}</span>`}${lv0?`<span class="rt"><span class="lv">${IC.sigL}</span></span>`:'<span></span>'}</div>${leagueH(l)}${teamsH(l,false)}</div>`}
+    body=`<div class="mbm">${epb(l)}<div class="mt">${lv0?`<span class="en">${esc(ev0.clock)}</span>`:`<span>${relDay(l.time)}</span>`}${lv0?`<span class="rt"><span class="lv">${IC.sigL}</span></span>`:'<span></span>'}</div>${leagueH(l)}${teamsH(l,false)}</div>`}
   else{const ex=S.bx[b.id]!==false;
-    body=`<div class="mbx${ex?'':' c'}" data-bx="${esc(b.id)}"><span class="mcn">${b.legs.length}</span><i class="cr"></i></div>`;
+    body=`<div class="mbx${ex?'':' c'}" data-bx="${esc(b.id)}">${b.legs.some(isEp)?'<span class="bgs"><span class="ebg">Early Payout</span></span>':''}<span class="mcn">${b.legs.length}</span><i class="cr"></i></div>`;
     if(ex)body+=b.legs.map(l=>{const lk=l.res?lKey(l.res):'',ev1=evMap[l.uid],lv=!!ev1&&ev1.state==='in'&&!l.res;if(lv)l.live=1;
-      return`<div class="mbl"><div class="lt">${l.res?'<span class="en">Ended</span>':lv?`<span class="en">${esc(ev1.clock)}</span>`:`<span>${relDay(l.time)}</span>`}<span class="rt">${(lv||l.live)?`<span class="lv">${IC.sigL}</span>`:''}${lk?`<span class="st ${lk}">${lLab[lk]}</span>`:''}</span></div>${leagueH(l)}${teamsH(l,true)}<div class="mp">${pickH(l)}</div></div>`}).join('')}
+      return`<div class="mbl">${epb(l)}<div class="lt">${l.res?'<span class="en">Ended</span>':lv?`<span class="en">${esc(ev1.clock)}</span>`:`<span>${relDay(l.time)}</span>`}<span class="rt">${(lv||l.live)?`<span class="lv">${IC.sigL}</span>`:''}${lk?`<span class="st ${lk}">${lLab[lk]}</span>`:''}</span></div>${leagueH(l)}${teamsH(l,true)}<div class="mp">${pickH(l)}</div></div>`}).join('')}
   const logo=typeof SRC!=='undefined'&&SRC?`<img alt="Rainbet" src="${SRC}">`:'<b>Rainbet</b>';
   const tk=tkOf(b);
   let rows=(!combo?`<div class="mbr pk"><span>${pickH(b.legs[0])}</span></div>`:'')+`<div class="mbr"><span>Total Odds</span><span>${dec2(fin)}</span></div><div class="mbr"><span>Stake</span><span>${b.stake.toFixed(2)} ${sy}</span></div>`;
   if(k==='open')rows+=`<div class="mbr w"><span>Potential Win</span><span>${(b.stake*fin).toFixed(2)} ${sy}</span></div>`;
   else if(k==='won')rows+=`<div class="mbr w"><span>You Won</span><span>${b.paid.toFixed(2)} ${sy}</span></div>`;
+  else if(k==='cashed')rows+=`<div class="mbr w"><span>Cashed Out</span><span>${b.paid.toFixed(2)} ${sy}</span></div>`;
   else if(k==='cancelled')rows+=`<div class="mbr w"><span>Refund</span><span>${b.paid.toFixed(2)} ${sy}</span></div>`;
-  return`<div class="mbc"><div class="mbt"><div><b>${combo?'Combo':'Single'}</b><span class="d">${bDate(b.t,open)}</span></div><span class="st ${k}">${bLab[k]}</span></div>${body}<div class="mbk"><span>Ticket ID: ${tk}<span data-cp="${tk}">${BCOPY}</span></span>${logo}</div>${rows}</div>`}
+  return`<div class="mbc"><div class="mbt"><div><b>${combo?'Combo':'Single'}</b><span class="d">${bDate(b.t,open)}</span></div><span class="st ${k}">${bLab[k]}</span></div>${body}<div class="mbk"><span>Ticket ID: ${tk}<span data-cp="${tk}">${BCOPY}</span></span>${logo}</div>${rows}${(open&&b.legs.some(isEp))?`<div class="mbo"><button class="co" data-co="${esc(b.id)}"><span class="cov">CASH OUT ${coVal(b).toFixed(2)} ${sy}</span></button><button class="sh" data-cp="${tk}">${BSHARE}</button></div>`:''}</div>`}
 const DFL={recent:'Recent Bets',today:'Today',week:'Past Week',month:'Past Month'};
 S.df={k:'recent',ap:null,open:false,cal:false,a:null,b:null,vy:0,vm:0};
 const dS=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
@@ -2782,6 +2809,8 @@ function renderBets(){
 function bindBets(){
   $s('vbets').addEventListener('click',e=>{
     const t=e.target;let n;
+    if(n=t.closest('[data-co]')){const b=S.bets.find(x=>x.id===n.dataset.co);
+      if(b&&b.status==='pending'){const v=coVal(b);b.status='cashed';b.paid=v;balance=r2(balance+v);try{save()}catch(x){}try{render()}catch(x){}try{RBSTATS.record(b.stake,v,'Sportsbook')}catch(x){}LSS('sb_bets',S.bets);toast('Cashed out · '+money(v));renderBets()}return}
     if(n=t.closest('[data-bf]')){S.bf=n.dataset.bf;renderBets();return}
     const D=S.df;
     if(n=t.closest('[data-dfm]')){D.open=!D.open;if(!D.open)D.cal=false;renderBets();return}
