@@ -1,0 +1,17 @@
+{
+ "name": "Rainbet",
+ "short_name": "Rainbet",
+ "start_url": "./index.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#14192f",
+ "theme_color": "#1a1e37",
+ "icons": [
+  {
+   "src": "icon-180.png",
+   "sizes": "180x180",
+   "type": "image/png"
+  }
+ ]
+}
