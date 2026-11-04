@@ -1491,8 +1491,8 @@ paint();
 <script id="rwFit">
 (function(){
 var pg=document.querySelector('.pg');if(!pg)return;
-function S(l,t){return 'left:calc('+l.toFixed(2)+'*var(--k));top:calc('+t.toFixed(2)+'*var(--k))'}
-function find(sel,l,t){var a=S(l,t);return [].find.call(pg.querySelectorAll(sel),function(e){return (e.getAttribute('style')||'').indexOf(a)>=0})}
+function N(x){return (x||'').replace(/\s+/g,'')}
+function find(sel,l,t){var a=N('left:calc('+l.toFixed(2)+'*var(--k))'),b=N('top:calc('+t.toFixed(2)+'*var(--k))');return [].find.call(pg.querySelectorAll(sel),function(e){var z=N(e.getAttribute('style'));return z.indexOf(a)>=0&&z.indexOf(b)>=0})}
 var items=[
  {t:find('.t',128.22,251.56),p:find('.a',107.30,240.00)},
  {t:find('.t',302.22,251.56),p:find('.a',281.30,240.00)}
