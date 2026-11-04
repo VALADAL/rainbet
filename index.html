@@ -1386,5 +1386,22 @@ html,body{background:#14192f!important}
  again();
 })();
 </script>
+<script id="dbgBox">
+(function(){
+ function mk(){
+  var p=document.createElement('div');p.style.cssText='position:fixed;left:0;right:0;top:0;height:0;padding-bottom:env(safe-area-inset-bottom,0px);visibility:hidden';document.body.appendChild(p);
+  var q=document.createElement('div');q.style.cssText='position:fixed;left:0;right:0;top:0;height:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden';document.body.appendChild(q);
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;left:8px;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:99999;background:#000c;color:#0f0;font:11px/1.35 monospace;padding:6px 8px;border-radius:6px;white-space:pre';
+  function upd(){
+   var vv=window.visualViewport;
+   d.textContent='standalone: '+navigator.standalone+'\ninnerH: '+innerHeight+'  screenH: '+screen.height+'\nvisualVP H: '+(vv?Math.round(vv.height):'-')+'\nsafe top/bottom: '+q.offsetHeight+' / '+p.offsetHeight+'\nUA: '+(/CriOS/.test(navigator.userAgent)?'Chrome':/FxiOS/.test(navigator.userAgent)?'Firefox':/Safari/.test(navigator.userAgent)?'Safari':'otro')+'\n(toca para cerrar)';
+  }
+  d.onclick=function(){d.remove()};
+  document.body.appendChild(d);upd();setInterval(upd,1000);
+ }
+ if(document.body)mk();else addEventListener('DOMContentLoaded',mk);
+})();
+</script>
 </body>
 </html>
