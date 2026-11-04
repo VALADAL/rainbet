@@ -468,5 +468,12 @@ var path=location.pathname.split('/').pop()||'index.html',home=(path==='index.ht
 var sb=document.querySelector('#lobby .sb');if(sb){sb.style.cursor='pointer';sb.addEventListener('click',openS)}
 })();
 </script>
+<style id="navFlush">
+/* barra inferior: iconos mas arriba para no chocar con la linea del home */
+:root{--navx:17px}
+.nav{height:calc(62.33px + var(--navx))!important}
+body{padding-bottom:calc(66.6px + var(--navx))!important}
+.nav.mn-open>div:first-child::after,.nav.pf-open .av::after{bottom:calc(var(--navx) + .67px)!important}
+</style>
 </body>
 </html>
